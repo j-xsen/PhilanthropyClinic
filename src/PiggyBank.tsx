@@ -37,7 +37,7 @@ type GLTFResult = GLTF & {
   animations: GLTFAction[]
 }
 
-export function Pig(props: JSX.IntrinsicElements['group']) {
+export function PiggyBank(props: JSX.IntrinsicElements['group']) {
   const group = React.useRef<THREE.Group>(null!)
   const { scene, animations } = useGLTF('/pig-transformed.glb')
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene])

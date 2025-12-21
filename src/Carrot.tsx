@@ -8,6 +8,9 @@ import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
 import type {GLTF} from 'three-stdlib';
 import type {JSX} from "react/jsx-runtime";
+import {useRef} from "react";
+import {Mesh} from "three";
+import {useFrame} from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -22,8 +25,16 @@ type GLTFResult = GLTF & {
 
 export function Carrot(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials } = useGLTF('/carrot-transformed.glb') as unknown as GLTFResult
+
+  const groupRef = useRef<Mesh>(null!);
+  useFrame(() => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y -= 0.02;
+    }
+  });
+
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} ref={groupRef}>
       <mesh geometry={nodes.Cone.geometry} material={materials.carrot} />
       <mesh geometry={nodes.Cone_1.geometry} material={materials.leaf} />
     </group>
