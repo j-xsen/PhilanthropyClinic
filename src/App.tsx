@@ -37,7 +37,7 @@ function App() {
 
 
     const piggyRigidRef = useRef<RapierRigidBody>(null!);
-    const piggyRef = useRef<PiggyBank>(null!);
+    const piggyRef = useRef(null!);
     const carrotRef = useRef<RapierRigidBody>(null!);
     return (
         <div id={"canvas-container"}>

@@ -1,6 +1,7 @@
 import {useEffect, useMemo} from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { SkeletonUtils } from 'three-stdlib'
+import type {JSX} from "react/jsx-runtime";
 
 type PiggyBankProps = JSX.IntrinsicElements['group'] & {
   curAnim: "Breathe" | "Jump";
