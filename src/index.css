@@ -5,4 +5,5 @@ html, body, #root, #canvas-container {
     padding: 0;
     overflow: hidden;
     background-color: #3aa2fd;
+    touch-action:none;
 }
