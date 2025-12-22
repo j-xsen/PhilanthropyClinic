@@ -1,23 +1,68 @@
 import './App.css'
 import {Canvas} from "@react-three/fiber";
 import {PiggyBank} from "./PiggyBank.tsx";
-import {CameraControls, Environment, Plane} from "@react-three/drei";
+import {DragControls, Environment, Plane} from "@react-three/drei";
 import {Carrot} from "./Carrot.tsx";
+import {Matrix4} from "three";
+import {Suspense, useRef, useState} from "react";
+import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "@react-three/rapier";
 
 function App() {
-  return (
-      <div id={"canvas-container"}>
-          <Canvas>
-              <CameraControls/>
-              <PiggyBank position={[0,-3,-4]} rotation={[0,0.5,0]}/>
-              <Carrot position={[0,2,-4]}/>
-              <Environment files={"studio_small_02_1k.exr"}/>
-              <Plane args={[20,20]} rotation={[-1.5,0,0]} position={[0,-4,-4]}>
-                  <meshStandardMaterial color={[0,0.25,0]}/>
-              </Plane>
-          </Canvas>
-      </div>
-  )
+    const check_carrot_on_pig = (_localMatrix: Matrix4,
+                                 deltaLocalMatrix: Matrix4) => {
+        const cur_carrot_pos = carrotRef.current.translation();
+        const new_carrot_pos = vec3({x:0,
+            y:cur_carrot_pos.y + deltaLocalMatrix.elements[13]/50,
+            z:-4});
+        carrotRef.current.setTranslation(new_carrot_pos, true);
+    }
+
+    const [curAnim, setCurAnim] = useState<"Breathe" | "Jump">("Breathe")
+
+    const pig_collide = (payload: CollisionPayload) => {
+        if (payload.other.rigidBodyObject?.name === "carrot") {
+            console.log("Piggy collided with carrot!");
+            setCurAnim("Jump");
+            // You can add more logic here, e.g., play a sound, update score, etc.
+        }
+    }
+
+    const pig_end_collide = (payload: CollisionPayload) => {
+        if (payload.other.rigidBodyObject?.name === "carrot") {
+            console.log("Piggy ended collision with carrot!");
+            setCurAnim("Breathe");
+            // You can add more logic here, e.g., play a sound, update score, etc.
+        }
+    }
+
+
+    const piggyRigidRef = useRef<RapierRigidBody>(null!);
+    const piggyRef = useRef<PiggyBank>(null!);
+    const carrotRef = useRef<RapierRigidBody>(null!);
+    return (
+        <div id={"canvas-container"}>
+            <Canvas>
+                <Suspense>
+                    <Physics>
+                        <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef} onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
+                            <PiggyBank ref={piggyRef} curAnim={curAnim} position={[0, -2, -4]} rotation={[0, 0.5, 0]}/>
+                        </RigidBody>
+                        <DragControls autoTransform={false} axisLock="z" onDrag={check_carrot_on_pig}>
+                            <RigidBody name={"carrot"} position={[0, 0, -4]} colliders={"cuboid"} gravityScale={0} ref={carrotRef} sensor>
+                                <Carrot/>
+                            </RigidBody>
+                        </DragControls>
+                        <RigidBody name="plane" colliders={"cuboid"} restitution={1}>
+                            <Plane args={[20, 20]} rotation={[-1.5, 0, 0]} position={[0, -4, -4]}>
+                                <meshStandardMaterial color={[0, 0.25, 0]}/>
+                            </Plane>
+                        </RigidBody>
+                    </Physics>
+                </Suspense>
+                <Environment files={"studio_small_02_1k.exr"}/>
+            </Canvas>
+        </div>
+    )
 }
 
 export default App
