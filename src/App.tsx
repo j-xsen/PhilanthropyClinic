@@ -21,17 +21,13 @@ function App() {
 
     const pig_collide = (payload: CollisionPayload) => {
         if (payload.other.rigidBodyObject?.name === "carrot") {
-            console.log("Piggy collided with carrot!");
             setCurAnim("Jump");
-            // You can add more logic here, e.g., play a sound, update score, etc.
         }
     }
 
     const pig_end_collide = (payload: CollisionPayload) => {
         if (payload.other.rigidBodyObject?.name === "carrot") {
-            console.log("Piggy ended collision with carrot!");
             setCurAnim("Breathe");
-            // You can add more logic here, e.g., play a sound, update score, etc.
         }
     }
 
@@ -52,7 +48,7 @@ function App() {
                                 <Carrot/>
                             </RigidBody>
                         </DragControls>
-                        <RigidBody name="plane" colliders={"cuboid"} restitution={1}>
+                        <RigidBody name="plane" colliders={"cuboid"} restitution={1} >
                             <Plane args={[20, 20]} rotation={[-1.5, 0, 0]} position={[0, -4, -4]}>
                                 <meshStandardMaterial color={[0, 0.25, 0]}/>
                             </Plane>
