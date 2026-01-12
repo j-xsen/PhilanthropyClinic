@@ -49,9 +49,9 @@ function App() {
                         <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef} onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
                             <PiggyBank ref={piggyRef} curAnim={curAnim} position={[0, -2, -4]} rotation={[0, 0.5, 0]}/>
                         </RigidBody>
-                        <Jail position={[0,0,-4]}/>
+                        <Jail position={[0,2,-4]} rotation={[0.1,0,0]}/>
                         <DragControls autoTransform={false} axisLock="z" onDrag={check_carrot_on_pig}>
-                            <RigidBody name={"carrot"} position={[0, 0, -4]} colliders={"cuboid"} gravityScale={0} ref={carrotRef} sensor>
+                            <RigidBody name={"carrot"} position={[0, 2, -4]} colliders={"cuboid"} gravityScale={0} ref={carrotRef} sensor>
                                 <Carrot jailState={jailState}/>
                             </RigidBody>
                         </DragControls>
