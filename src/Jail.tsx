@@ -5,12 +5,11 @@ Files: jail.glb [35.26KB] > /home/jax/Desktop/personal/philanthropy-clinic/jail-
 */
 
 import * as THREE from 'three'
-import { useGLTF } from '@react-three/drei'
+import {Box, useGLTF} from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
 import {useLoader} from "@react-three/fiber";
 import {TextureLoader} from "three";
-import {RigidBody} from "@react-three/rapier";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -18,7 +17,7 @@ type GLTFResult = GLTF & {
   }
 }
 
-export function Jail(props: JSX.IntrinsicElements['group']) {
+export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolean}) {
   const { nodes } = useGLTF('/jail-transformed.glb') as unknown as GLTFResult
 
   const [color, rough] = useLoader(TextureLoader, [
@@ -26,14 +25,26 @@ export function Jail(props: JSX.IntrinsicElements['group']) {
       'textures/jail-rough.avif',
   ]);
 
+  const onPointerEnter = () => {
+      if (props.jailState) return;
+      document.body.style.cursor = "pointer";
+  }
+
+  const onPointerLeave = () => {
+      if (props.jailState) return;
+        document.body.style.cursor = "default";
+  }
+
+  const invisMat = new THREE.MeshStandardMaterial({color: 'white', opacity: 0, transparent: true});
+
   return (
     <group {...props} dispose={null}>
-        <RigidBody name={"jail"} colliders={"cuboid"} gravityScale={0}>
+        <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
       <mesh geometry={nodes.jail.geometry}>
           <meshStandardMaterial map={color} roughnessMap={rough}
           metalness={1}/>
       </mesh>
-        </RigidBody>
+        </Box>
     </group>
   )
 }
