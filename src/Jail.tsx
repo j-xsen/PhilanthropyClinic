@@ -10,6 +10,7 @@ import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
 import {useLoader} from "@react-three/fiber";
 import {TextureLoader} from "three";
+import {RigidBody} from "@react-three/rapier";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -27,10 +28,12 @@ export function Jail(props: JSX.IntrinsicElements['group']) {
 
   return (
     <group {...props} dispose={null}>
+        <RigidBody name={"jail"} colliders={"cuboid"} gravityScale={0}>
       <mesh geometry={nodes.jail.geometry}>
           <meshStandardMaterial map={color} roughnessMap={rough}
           metalness={1}/>
       </mesh>
+        </RigidBody>
     </group>
   )
 }

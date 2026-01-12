@@ -9,8 +9,10 @@ import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "
 import {Jail} from "./Jail.tsx";
 
 function App() {
+    const [jailState,] = useState<boolean>(false);
     const check_carrot_on_pig = (_localMatrix: Matrix4,
                                  deltaLocalMatrix: Matrix4) => {
+        if (!jailState) return;
         const cur_carrot_pos = carrotRef.current.translation();
         const new_carrot_pos = vec3({x:0,
             y:cur_carrot_pos.y + deltaLocalMatrix.elements[13]/50,
@@ -50,11 +52,11 @@ function App() {
                         <Jail position={[0,0,-4]}/>
                         <DragControls autoTransform={false} axisLock="z" onDrag={check_carrot_on_pig}>
                             <RigidBody name={"carrot"} position={[0, 0, -4]} colliders={"cuboid"} gravityScale={0} ref={carrotRef} sensor>
-                                <Carrot/>
+                                <Carrot jailState={jailState}/>
                             </RigidBody>
                         </DragControls>
-                        <RigidBody name="plane" colliders={"cuboid"} restitution={1} >
-                            <Plane args={[20, 20]} rotation={[-1.5, 0, 0]} position={[0, -4, -4]}>
+                        <RigidBody name="plane" colliders={"cuboid"} restitution={0} >
+                            <Plane args={[60, 20]} rotation={[-1.5, 0, 0]} position={[0, -4, -4]}>
                                 <meshStandardMaterial color={[0, 0.25, 0]} map={grassColorMap}/>
                             </Plane>
                         </RigidBody>

@@ -23,7 +23,7 @@ type GLTFResult = GLTF & {
   }
 }
 
-export function Carrot(props: JSX.IntrinsicElements['group']) {
+export function Carrot(props: JSX.IntrinsicElements['group'] & {jailState?: boolean}) {
   const { nodes, materials } = useGLTF('/carrot-transformed.glb') as unknown as GLTFResult
 
   const [hovered, setHovered] = useState(false)
@@ -36,8 +36,9 @@ export function Carrot(props: JSX.IntrinsicElements['group']) {
   });
 
   useEffect(() => {
+    if (!props.jailState) return;
     document.body.style.cursor = hovered ? "pointer" : "default";
-  }, [hovered]);
+  }, [hovered, props.jailState]);
 
   return (
     <group {...props} dispose={null} ref={groupRef} onPointerOver={()=>setHovered(true)} onPointerOut={() => setHovered(false)}>
