@@ -10,6 +10,7 @@ import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
 import {useLoader} from "@react-three/fiber";
 import {TextureLoader} from "three";
+import LoginOrDonateMenu from "./LoginOrDonateMenu.tsx";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -37,15 +38,15 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
 
   const invisMat = new THREE.MeshStandardMaterial({color: 'white', opacity: 0, transparent: true});
 
-  return (
+  return (<>
     <group {...props} dispose={null}>
-        <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
+        <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}/>
       <mesh geometry={nodes.jail.geometry}>
           <meshStandardMaterial map={color} roughnessMap={rough}
           metalness={1}/>
       </mesh>
-        </Box>
     </group>
+    <LoginOrDonateMenu/></>
   )
 }
 
