@@ -43,7 +43,7 @@ function App() {
 
     return (
         <div id={"canvas-container"}>
-            <Canvas>
+            <Canvas gl={{localClippingEnabled:true}}>
                 <Suspense>
                     <Physics>
                         <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef} onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
