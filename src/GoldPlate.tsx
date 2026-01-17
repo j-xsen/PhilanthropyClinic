@@ -8,7 +8,6 @@ import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import {Container, Fullscreen, Text} from "@react-three/uikit";
 
 type GLTFResult = GLTF & {
   nodes: {

@@ -11,6 +11,7 @@ import type {JSX} from "react/jsx-runtime";
 import {useLoader} from "@react-three/fiber";
 import {TextureLoader} from "three";
 import LoginOrDonateMenu from "./LoginOrDonateMenu.tsx";
+import {useState} from "react";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -26,6 +27,8 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
       'textures/jail-rough.avif',
   ]);
 
+  const [panelState, setPanelState] = useState<boolean>(false);
+
   const onPointerEnter = () => {
       if (props.jailState) return;
       document.body.style.cursor = "pointer";
@@ -36,17 +39,21 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
         document.body.style.cursor = "default";
   }
 
+  const onClick = () => {
+      setPanelState(true);
+  }
+
   const invisMat = new THREE.MeshStandardMaterial({color: 'white', opacity: 0, transparent: true});
 
   return (<>
     <group {...props} dispose={null}>
-        <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}/>
+        <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave} onClick={onClick}/>
       <mesh geometry={nodes.jail.geometry}>
           <meshStandardMaterial map={color} roughnessMap={rough}
           metalness={1}/>
       </mesh>
     </group>
-    <LoginOrDonateMenu/></>
+    <LoginOrDonateMenu panelState={panelState} setPanelState={setPanelState} /></>
   )
 }
 
