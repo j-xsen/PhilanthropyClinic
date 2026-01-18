@@ -1,6 +1,7 @@
 import {GoldPlate} from "./GoldPlate.tsx";
-import {Container, Input, Text} from "@react-three/uikit";
+import {Container, Text} from "@react-three/uikit";
 import {useEffect, useState} from "react";
+import {Html} from "@react-three/drei";
 
 export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelState:(state:boolean)=>void}) {
 
@@ -34,18 +35,19 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
     }
 
     return <>
-    <group position={[0, 0, 3.25]}>
+    <group position={[0, 0, 3]}>
         <GoldPlate position={[0,0,-0.2]}/>
         <Container width={132} marginTop={-3.5}>
             <Container marginRight={3}>
             <Text color={"#ddd"} fontSize={6} marginRight={2} marginLeft={2}>EMAIL:</Text>
             </Container>
         </Container>
-        <group position={[-.025, 0.05, -.1]}>
-            <Container overflow={"scroll"} scrollbarWidth={2} height={12} maxWidth={90} paddingTop={2}>
-                <Container backgroundColor={"#111"} opacity={0.25} width={80} positionType={"absolute"} positionLeft={2} positionBottom={0} height={10}/>
-                <Input fontSize={7} maxWidth={82} width={82} placeholder={"email@email.com"} caretWidth={1} color={"#ccc"} selectionColor={"#e49624"} caretColor={"#ccc"} marginLeft={2}/>
-            </Container>
+        <group>
+                <Html>
+                    <form style={{width:"100%", marginLeft:"-51%", marginTop:"-2rem"}}>
+                    <input style={{width:200, backgroundColor: "rgba(68,68,68,0.2)", border: "hidden", fontSize:23, padding:"5px", color:"#fff"}} name={"email"} type={"email"} placeholder={"email@email.com"}></input>
+                    </form>
+                </Html>
         </group>
         <group position={[.55,-.05,0.2]}>
         <Container backgroundColor={exitColor} width={10} height={10} positionType={"absolute"} positionTop={-65} onPointerEnter={exitMouseEnter} onPointerLeave={exitMouseExit} onPointerDown={exitMouseDown} onPointerUp={exitMouseExit} onClick={exitFunc}>
