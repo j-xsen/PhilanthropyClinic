@@ -11,10 +11,12 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
 
     const exitMouseEnter = () => {
         setExitColor("#ef5b5b")
+        document.body.style.cursor = "pointer";
     }
 
     const exitMouseExit = () => {
         setExitColor("#f00")
+        document.body.style.cursor = "default";
     }
 
     const exitMouseDown = () => {

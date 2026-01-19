@@ -30,17 +30,19 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
   const [panelState, setPanelState] = useState<boolean>(false);
 
   const onPointerEnter = () => {
-      if (props.jailState) return;
+      if (props.jailState || panelState) return;
       document.body.style.cursor = "pointer";
   }
 
   const onPointerLeave = () => {
-      if (props.jailState) return;
+      if (props.jailState || panelState) return;
         document.body.style.cursor = "default";
   }
 
   const onClick = () => {
+      if (props.jailState || panelState) return;
       setPanelState(true);
+      document.body.style.cursor = "default"
   }
 
   const invisMat = new THREE.MeshStandardMaterial({color: 'white', opacity: 0, transparent: true});
