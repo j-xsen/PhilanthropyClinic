@@ -2,43 +2,74 @@ import {GoldPlate} from "./GoldPlate.tsx";
 import {Container, Content, Text} from "@react-three/uikit";
 import {useEffect, useState} from "react";
 import {Html} from "@react-three/drei";
+import {Dollar} from "./Dollar.tsx";
+import type {ThreeEvent} from "@react-three/fiber";
 
 export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelState:(state:boolean)=>void}) {
 
-    const [exitColor, setExitColor] = useState<string>("#f00");
-
     const [isVisible, setIsVisible] = useState<boolean>(props.panelState || false);
+    const [btnOne, setBtnOne] = useState<boolean>(false);
+    const [btnFive, setBtnFive] = useState<boolean>(false);
+    const [btnTen, setBtnTen] = useState<boolean>(false);
 
+    // exit
+    const [exitColor, setExitColor] = useState<string>("#f00");
     const exitMouseEnter = () => {
         setExitColor("#ef5b5b")
         document.body.style.cursor = "pointer";
     }
-
     const exitMouseExit = () => {
         setExitColor("#f00")
         document.body.style.cursor = "default";
     }
-
     const exitMouseDown = () => {
         setExitColor("#7e1919")
     }
-
     const exitFunc = () => {
         setIsVisible(false);
         props.setPanelState(false);
     }
 
+    // visibility
     useEffect(() => {
         setIsVisible(props.panelState);
     },[props.panelState])
-
     if (!isVisible) {
         return <></>
     }
 
+    const amountBtnClick = (e: ThreeEvent<MouseEvent>) => {
+        // clear all
+        if (btnOne){
+            setBtnOne(false);
+        }
+        if (btnFive){
+            setBtnFive(false);
+        }
+        if (btnTen){
+            setBtnTen(false);
+        }
+
+        const selected = e.eventObject.name
+        if (selected == "1"){
+            setBtnOne(true);
+        }
+        else if (selected == "5") {
+            setBtnFive(true);
+        }
+        else if (selected == "10") {
+            setBtnTen(true);
+        }
+
+    }
+
+    const dollarScale = 0.05
     return <>
         <group position={[0,0,2.9]}>
         <GoldPlate/>
+            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnOne}/>
+            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnFive}/>
+            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnFive}/>
         </group>
     <group position={[0, 0, 3.1]}>
         <Container width={132} marginTop={-3.5}>
