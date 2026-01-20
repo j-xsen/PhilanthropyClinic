@@ -69,7 +69,7 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         <GoldPlate/>
             <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnOne}/>
             <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnFive}/>
-            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnFive}/>
+            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnTen}/>
         </group>
     <group position={[0, 0, 3.1]}>
         <Container width={132} marginTop={-3.5}>
