@@ -40,17 +40,21 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
 
     const amountBtnClick = (e: ThreeEvent<MouseEvent>) => {
         // clear all
+        const selected = e.eventObject.name
+        let allOff = false
         if (btnOne){
+            if (selected=="1") allOff = true;
             setBtnOne(false);
         }
         if (btnFive){
+            if (selected=="5") allOff = true;
             setBtnFive(false);
         }
         if (btnTen){
+            if (selected=="10") allOff = true;
             setBtnTen(false);
         }
-
-        const selected = e.eventObject.name
+        if (allOff) return
         if (selected == "1"){
             setBtnOne(true);
         }
@@ -67,9 +71,9 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
     return <>
         <group position={[0,0,2.9]}>
         <GoldPlate/>
-            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnOne}/>
-            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnFive}/>
-            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.2,0,-.12]} scale={dollarScale} onClick={amountBtnClick} pressed={btnTen}/>
+            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} scale={dollarScale} onClick={amountBtnClick} pressed={btnOne}/>
+            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} scale={dollarScale} onClick={amountBtnClick} pressed={btnFive}/>
+            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} scale={dollarScale} onClick={amountBtnClick} pressed={btnTen}/>
         </group>
     <group position={[0, 0, 3.1]}>
         <Container width={132} marginTop={-3.5}>
