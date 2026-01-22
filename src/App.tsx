@@ -1,7 +1,7 @@
 import './App.css'
 import {Canvas, useLoader} from "@react-three/fiber";
 import {PiggyBank} from "./PiggyBank.tsx";
-import {DragControls, Environment, Plane} from "@react-three/drei";
+import {DragControls, Environment, OrbitControls, Plane} from "@react-three/drei";
 import {Carrot} from "./Carrot.tsx";
 import {Matrix4, TextureLoader} from "three";
 import {Suspense, useRef, useState} from "react";
