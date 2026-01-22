@@ -1,6 +1,6 @@
 import {GoldPlate} from "./GoldPlate.tsx";
 import {Container, Content, Text} from "@react-three/uikit";
-import {type FormEvent, useEffect, useState} from "react";
+import {type ChangeEvent, useEffect, useState} from "react";
 import {Html} from "@react-three/drei";
 import {Dollar} from "./Dollar.tsx";
 import type {ThreeEvent} from "@react-three/fiber";
@@ -61,7 +61,7 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         else if (selected == "10") setBtnTen(true);
     }
 
-    const updateInput = (e:FormEvent) => {
+    const updateInput = (e:ChangeEvent<HTMLInputElement>) => {
         const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         // const status = pattern.test(e.target.value)
         const val = e.target.value
