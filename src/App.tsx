@@ -7,6 +7,9 @@ import {Matrix4, TextureLoader} from "three";
 import {Suspense, useRef, useState} from "react";
 import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "@react-three/rapier";
 import {Jail} from "./Jail.tsx";
+import {Dollar} from "./Dollar.tsx";
+import {GoldPlate} from "./GoldPlate.tsx";
+import {Light} from "./Light.tsx";
 
 function App() {
     const [jailState,] = useState<boolean>(false);
@@ -45,6 +48,11 @@ function App() {
         <div id={"canvas-container"}>
             <Canvas gl={{localClippingEnabled:true}}>
                 <Suspense>
+                    <group visible={false}>
+                        <Light emailValid={0}/>
+                        <Dollar amount={0} pressed={false}/>
+                        <GoldPlate/>
+                    </group>
                     <Physics>
                         <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef} onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
                             <PiggyBank ref={piggyRef} curAnim={curAnim} position={[0, -2, -4]} rotation={[0, 0.5, 0]}/>

@@ -5,11 +5,11 @@ Files: 1dollar.glb [285.8KB] > /home/jax/Desktop/personal/philanthropy-clinic/do
 */
 
 import * as THREE from 'three'
-import {useGLTF, useTexture} from '@react-three/drei'
+import {useGLTF, useKTX2} from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import {useEffect, useState} from "react";
-import {Color, Texture} from "three";
+import {useEffect, useMemo} from "react";
+import {Color} from "three";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -20,6 +20,8 @@ type GLTFResult = GLTF & {
 export function Dollar(props: JSX.IntrinsicElements['group'] & {amount: number, pressed: boolean}) {
   const { nodes } = useGLTF('/dollar-transformed.glb') as unknown as GLTFResult
 
+  const geometry = useMemo(()=>nodes.Cube.geometry,[nodes])
+
   const mouseEnter = () => {
     document.body.style.cursor = "pointer";
   }
@@ -28,50 +30,56 @@ export function Dollar(props: JSX.IntrinsicElements['group'] & {amount: number, 
     document.body.style.cursor = "default";
   }
 
-  const [scale, setScale] = useState<[number,number,number]>([1,1,1]);
-
-  useEffect(() => {
-    setScale(props.pressed ? [1,0.5,1] : [1,1,1])
-  },[props.pressed])
-
-  const [oneMap, fiveMap, tenMap] = useTexture(['/textures/1dollar.png',"/textures/5dollar.png","/textures/10dollar.png"])
-  const [emitOne,emitFive, emitTen] = useTexture(['/textures/blank1dollar.png','/textures/blank5dollar.png',"/textures/blank10dollar.png"])
+  const [oneMap, fiveMap, tenMap] = useKTX2(['/textures/1dollar.ktx2',"/textures/5dollar.ktx2","/textures/10dollar.ktx2"])
+  const [emitOne,emitFive, emitTen] = useKTX2(['/textures/blank1dollar.ktx2','/textures/blank5dollar.ktx2',"/textures/blank10dollar.ktx2"])
   oneMap.flipY=false
+  oneMap.colorSpace = THREE.SRGBColorSpace
   fiveMap.flipY=false
+  fiveMap.colorSpace = THREE.SRGBColorSpace
   tenMap.flipY=false
+  tenMap.colorSpace = THREE.SRGBColorSpace
   emitOne.flipY=false
   emitFive.flipY=false
   emitTen.flipY=false
 
-  let activeMap: Texture
-  let activeEmit: Texture
-  if (props.amount===1){
-    activeMap = oneMap
-    activeEmit = emitOne
-  } else if (props.amount===5){
-    activeMap=fiveMap
-    activeEmit = emitFive
-  } else {
-    activeMap=tenMap
-    activeEmit = emitTen
-  }
+  const {amount} = props
+  const {map,emit} = useMemo(()=>{
+    if(amount===1) return {map:oneMap, emit:emitOne}
+    if(amount===5) return {map:fiveMap, emit:emitFive}
+    return {map:tenMap, emit:emitTen}
+  },[amount, oneMap, fiveMap, tenMap, emitOne, emitFive, emitTen])
 
-  const newMat = new THREE.MeshStandardMaterial()
-  newMat.map=activeMap
-  newMat.emissive=new Color(1,1,1)
-  newMat.emissiveMap=activeEmit
-  newMat.emissiveIntensity=props.pressed?0:2
-  const gray = .2
-  newMat.color=new THREE.Color(gray,gray,gray)
+  const material = useMemo(() => {
+    const mat = new THREE.MeshStandardMaterial({
+      color:new Color(.2,.2,.2),
+      emissive: new Color(1,1,1)
+    })
+    return mat
+  }, [])
+
+  useEffect(()=>{
+    material.map = map
+    material.emissiveMap = emit
+    material.needsUpdate = true
+  },[map, emit, material])
+
+  const {pressed} = props
+  useEffect(()=>{
+    material.emissiveIntensity = pressed ? 0 : 10
+  }, [pressed, material])
 
   return (
-    <group {...props} dispose={null} name={props.amount as unknown as string}>
-      <mesh geometry={nodes.Cube.geometry} scale={scale} material={newMat} onPointerEnter={mouseEnter} onPointerLeave={mouseExit}
+      <mesh {...props} geometry={geometry} scale={props.pressed ? [.055,0.005,0.055] : [.055,.055,.055]}
+            name={props.amount as unknown as string} material={material}
+            onPointerEnter={mouseEnter} onPointerLeave={mouseExit}
       />
-    </group>
   )
 }
 
-useGLTF.preload('/dollar-transformed.glb')
-useTexture.preload(['/textures/1dollar.png',"/textures/5dollar.png", "/textures/10dollar.png"])
-useTexture.preload(["/textures/blank1dollar.png","/textures/blank5dollar.png","/textures/blank10dollar.png"])
+useGLTF.preload("/dollar-transformed.glb")
+useKTX2.preload("/textures/1dollar.ktx2")
+useKTX2.preload("/textures/5dollar.ktx2")
+useKTX2.preload("/textures/10dollar.ktx2")
+useKTX2.preload("/textures/blank1dollar.ktx2")
+useKTX2.preload("/textures/blank5dollar.ktx2")
+useKTX2.preload("/textures/blank10dollar.ktx2")

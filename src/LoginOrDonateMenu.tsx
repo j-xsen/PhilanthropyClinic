@@ -5,13 +5,14 @@ import {Html} from "@react-three/drei";
 import {Dollar} from "./Dollar.tsx";
 import type {ThreeEvent} from "@react-three/fiber";
 import {Light} from "./Light.tsx";
+import {type EmailState, OFF, VALID} from "./EmailState.tsx";
 
 export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelState:(state:boolean)=>void}) {
 
     const [isVisible, setIsVisible] = useState<boolean>(props.panelState || false);
     const [selectedAmount, setSelectedAmount] = useState<number | null>(null)
 
-    const [emailValid, setEmailValid] = useState<number>(0);
+    const [emailValid, setEmailValid] = useState<EmailState>(OFF);
 
     // exit
     const [exitColor, setExitColor] = useState<string>("#f00");
@@ -32,16 +33,10 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         setPanelState(false);
     },[setPanelState])
 
-    const updateInput = (e:ChangeEvent<HTMLInputElement>) => {
+    const updateInput = useCallback((e:ChangeEvent<HTMLInputElement>) => {
         const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        // const status = pattern.test(e.target.value)
-        const val = e.target.value
-        if (pattern.test(val)) {
-            setEmailValid(1)
-        } else {
-            setEmailValid(0)
-        }
-    }
+        setEmailValid(pattern.test(e.target.value) ? VALID : OFF)
+    },[])
 
     const emailInput = useMemo(() => (
         <Html>
@@ -49,7 +44,7 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
                 <input onInput={updateInput} style={{width:175, backgroundColor: "rgba(68,68,68,0.2)", border: "hidden", fontSize:18, padding:"5px", color:"#fff"}} name={"email"} type={"email"} placeholder={"email@email.com"}></input>
             </form>
         </Html>
-    ),[])
+    ),[updateInput])
 
     useEffect(() => {
         setIsVisible(props.panelState);

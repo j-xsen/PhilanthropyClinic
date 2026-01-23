@@ -5,11 +5,11 @@ Files: light.glb [13.69KB] > /home/jax/Desktop/personal/philanthropy-clinic/ligh
 */
 
 import * as THREE from 'three'
-import {Color} from 'three'
 import {MeshTransmissionMaterial, useGLTF} from '@react-three/drei'
 import type {GLTF} from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import {useEffect, useRef} from "react";
+import {useEffect, useMemo} from "react";
+import {CREATED, type EmailState, OFF, VALID} from "./EmailState.tsx";
 
 
 type GLTFResult = GLTF & {
@@ -25,28 +25,29 @@ type GLTFResult = GLTF & {
     }
 }
 
-export function Light(props: JSX.IntrinsicElements['group'] & {emailValid:number}) {
+
+export function Light(props: JSX.IntrinsicElements['group'] & {emailValid:EmailState}) {
     const {nodes, materials} = useGLTF('/light-transformed.glb') as unknown as GLTFResult
 
-    const emitColor = useRef(new Color(1,0,0))
-
-    const emitMat = new THREE.MeshStandardMaterial({
-        color: emitColor.current,
-        emissive: emitColor.current,
-        emissiveIntensity: 10
-    })
+    const emitMat = useMemo(()=>new THREE.MeshStandardMaterial({
+        emissiveIntensity: 50,
+    }),[])
 
     useEffect(() => {
-        if (props.emailValid==0){
-            emitColor.current.setRGB(1,0,0)
+        if(!emitMat) return
+        switch(props.emailValid){
+            case VALID:
+                emitMat.color.setRGB(1,1,0)
+                break
+            case CREATED:
+                emitMat.color.setRGB(0,1,0)
+                break
+            case OFF:
+            default:
+                emitMat.color.setRGB(1,0,0)
+                break
         }
-        else if (props.emailValid==1){
-            emitColor.current.setRGB(1,1,0)
-        }
-        else if (props.emailValid==2){
-            emitColor.current.setRGB(0,1,0)
-        }
-    },[props.emailValid])
+    },[props.emailValid, emitMat])
 
     return (
         <group {...props} dispose={null}>
