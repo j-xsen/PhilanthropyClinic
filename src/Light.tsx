@@ -9,7 +9,7 @@ import {Color} from 'three'
 import {MeshTransmissionMaterial, useGLTF} from '@react-three/drei'
 import type {GLTF} from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import {useEffect, useState} from "react";
+import {useEffect, useRef} from "react";
 
 
 type GLTFResult = GLTF & {
@@ -28,23 +28,23 @@ type GLTFResult = GLTF & {
 export function Light(props: JSX.IntrinsicElements['group'] & {emailValid:number}) {
     const {nodes, materials} = useGLTF('/light-transformed.glb') as unknown as GLTFResult
 
-    const [emitColor, setEmitColor] = useState<Color>(new Color(1,0,0))
+    const emitColor = useRef(new Color(1,0,0))
 
     const emitMat = new THREE.MeshStandardMaterial({
-        color: emitColor,
-        emissive: emitColor,
+        color: emitColor.current,
+        emissive: emitColor.current,
         emissiveIntensity: 10
     })
 
     useEffect(() => {
         if (props.emailValid==0){
-            setEmitColor(new Color(1,0,0))
+            emitColor.current.setRGB(1,0,0)
         }
         else if (props.emailValid==1){
-            setEmitColor(new Color(1,1,0))
+            emitColor.current.setRGB(1,1,0)
         }
         else if (props.emailValid==2){
-            setEmitColor(new Color(0,1,0))
+            emitColor.current.setRGB(0,1,0)
         }
     },[props.emailValid])
 
