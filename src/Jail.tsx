@@ -5,11 +5,9 @@ Files: jail.glb [35.26KB] > /home/jax/Desktop/personal/philanthropy-clinic/jail-
 */
 
 import * as THREE from 'three'
-import {Box, useGLTF} from '@react-three/drei'
+import {Box, useGLTF, useKTX2} from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import {useLoader} from "@react-three/fiber";
-import {TextureLoader} from "three";
 import LoginOrDonateMenu from "./LoginOrDonateMenu.tsx";
 import {useState} from "react";
 
@@ -22,10 +20,7 @@ type GLTFResult = GLTF & {
 export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolean}) {
   const { nodes } = useGLTF('/jail-transformed.glb') as unknown as GLTFResult
 
-  const [color, rough] = useLoader(TextureLoader, [
-      'textures/jail-color.avif',
-      'textures/jail-rough.avif',
-  ]);
+  const jailMap = useKTX2('textures/jail.ktx2');
 
   const [panelState, setPanelState] = useState<boolean>(false);
 
@@ -51,12 +46,12 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
     <group {...props} dispose={null}>
         <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave} onClick={onClick}/>
       <mesh geometry={nodes.jail.geometry}>
-          <meshStandardMaterial map={color} roughnessMap={rough}
-          metalness={1}/>
+          <meshStandardMaterial map={jailMap}/>
       </mesh>
     </group>
     <LoginOrDonateMenu panelState={panelState} setPanelState={setPanelState} /></>
   )
 }
 
+useKTX2.preload("/textures/jail.ktx2")
 useGLTF.preload('/jail-transformed.glb')
