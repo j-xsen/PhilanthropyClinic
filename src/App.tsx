@@ -10,6 +10,7 @@ import {Jail} from "./Jail.tsx";
 import {Dollar} from "./Dollar.tsx";
 import {GoldPlate} from "./GoldPlate.tsx";
 import {Light} from "./Light.tsx";
+import AnimatedClouds from "./AnimatedClouds.tsx";
 
 function App() {
     const [jailState,] = useState<boolean>(false);
@@ -51,6 +52,7 @@ function App() {
             <Canvas gl={{localClippingEnabled: true}}>
                 <Suspense>
                     <Sky rayleigh={1} turbidity={0} sunPosition={[200, 60, 1000]}/>
+                    <AnimatedClouds/>
                     <group visible={false}>
                         <Light emailValid={0}/>
                         <Dollar amount={0} pressed={false}/>
