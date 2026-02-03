@@ -1,18 +1,19 @@
 import {Cloud, Clouds} from "@react-three/drei";
-import {MeshStandardMaterial} from "three";
+import {Group, MeshStandardMaterial} from "three";
 import {useRef} from "react";
 import {useFrame} from "@react-three/fiber";
 
 function AnimatedClouds(){
 
-    const cloudOne = useRef(null);
-    const cloudTwo = useRef(null);
-    const cloudThree = useRef(null);
-    const cloudFour = useRef(null);
-    const cloudFive = useRef(null);
-    const clouds = useRef(null);
+    const cloudOne = useRef<Group>(null);
+    const cloudTwo = useRef<Group>(null);
+    const cloudThree = useRef<Group>(null);
+    const cloudFour = useRef<Group>(null);
+    const cloudFive = useRef<Group>(null);
+    const clouds = useRef<Group>(null);
 
-    const xHi = 10
+    const xHi = 30
+    const xAdd = 0.01
 
     useFrame(() => {
         if (!cloudOne.current) return;
@@ -21,11 +22,11 @@ function AnimatedClouds(){
         if (!cloudFour.current) return;
         if (!cloudFive.current) return;
 
-        cloudOne.current.position.x += 0.1
-        cloudTwo.current.position.x += 0.1
-        cloudThree.current.position.x += 0.1
-        cloudFour.current.position.x += 0.1
-        cloudFive.current.position.x += 0.1
+        cloudOne.current.position.x += xAdd
+        cloudTwo.current.position.x += xAdd
+        cloudThree.current.position.x += xAdd
+        cloudFour.current.position.x += xAdd
+        cloudFive.current.position.x += xAdd
 
         if (cloudOne.current.position.x > xHi) {
             cloudOne.current.position.x = -xHi
@@ -45,12 +46,12 @@ function AnimatedClouds(){
     })
 
  return (
-     <Clouds material={MeshStandardMaterial} position={[0,17,-15]} ref={clouds}>
+     <Clouds position={[0,17,-15]} ref={clouds} material={MeshStandardMaterial}>
          <Cloud position={[0,0,0]} ref={cloudOne}/>
-         <Cloud position={[-20,-5,0]} ref={cloudTwo}/>
+         <Cloud position={[-30,-5,0]} ref={cloudTwo}/>
          <Cloud position={[-15,-1,0]} ref={cloudThree}/>
          <Cloud position={[-5,-8,-1]} ref={cloudFour}/>
-         <Cloud position={[15,-4,0]} ref={cloudFive}/>
+         <Cloud position={[20,-4,0]} ref={cloudFive}/>
      </Clouds>
  )
 }
