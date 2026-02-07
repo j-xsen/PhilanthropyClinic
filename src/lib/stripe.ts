@@ -1,5 +1,3 @@
-import {loadStripe} from "@stripe/stripe-js"
+import Stripe from 'stripe'
 
-export const stripePromise = loadStripe(
-    import.meta.env.VITE_STRIPE_PUBLISH_KEY
-)
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)

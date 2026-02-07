@@ -4,13 +4,17 @@ import {PiggyBank} from "./PiggyBank.tsx";
 import {DragControls, Environment, Plane, Sky} from "@react-three/drei";
 import {Carrot} from "./Carrot.tsx";
 import {Matrix4, TextureLoader} from "three";
-import {Suspense, useRef, useState} from "react";
+import {Suspense, useMemo, useRef, useState} from "react";
 import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "@react-three/rapier";
 import {Jail} from "./Jail.tsx";
 import {Dollar} from "./Dollar.tsx";
 import {GoldPlate} from "./GoldPlate.tsx";
 import {Light} from "./Light.tsx";
 import AnimatedClouds from "./AnimatedClouds.tsx";
+import {CheckoutProvider} from "@stripe/react-stripe-js/checkout";
+import {loadStripe} from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
 
 function App() {
     const [jailState,] = useState<boolean>(false);
@@ -47,8 +51,17 @@ function App() {
 
     const grassColorMap = useLoader(TextureLoader, 'textures/grass-color.avif');
 
+    const promise = useMemo(async () => {
+        const res = await fetch('/api/actions/checkout', {
+            method: 'POST',
+        });
+        const data = await res.json();
+        return data.clientSecret;
+    }, [])
+
     return (
         <div id={"canvas-container"}>
+            <CheckoutProvider stripe={stripePromise} options={{clientSecret:promise}}>
             <Canvas gl={{localClippingEnabled: true}}>
                 <Suspense>
                     <Sky rayleigh={1} turbidity={0} sunPosition={[200, 60, 1000]}/>
@@ -79,6 +92,7 @@ function App() {
                 </Suspense>
                 <Environment files={"studio_small_02_1k.exr"}/>
             </Canvas>
+            </CheckoutProvider>
         </div>
     )
 }
