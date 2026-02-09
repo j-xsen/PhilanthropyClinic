@@ -9,7 +9,7 @@ import {MeshTransmissionMaterial, useGLTF} from '@react-three/drei'
 import type {GLTF} from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
 import {useEffect, useMemo} from "react";
-import {CREATED, type EmailState, OFF, VALID} from "./EmailState.tsx";
+import {CREATED, type EmailState, OFF, VALID} from "../EmailState.tsx";
 
 
 type GLTFResult = GLTF & {

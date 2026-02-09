@@ -1,15 +1,15 @@
 import './App.css'
 import {Canvas, useLoader} from "@react-three/fiber";
-import {PiggyBank} from "./PiggyBank.tsx";
+import {PiggyBank} from "./models/PiggyBank.tsx";
 import {DragControls, Environment, Plane, Sky} from "@react-three/drei";
-import {Carrot} from "./Carrot.tsx";
+import {Carrot} from "./models/Carrot.tsx";
 import {Matrix4, TextureLoader} from "three";
 import {Suspense, useMemo, useRef, useState} from "react";
 import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "@react-three/rapier";
-import {Jail} from "./Jail.tsx";
-import {Dollar} from "./Dollar.tsx";
-import {GoldPlate} from "./GoldPlate.tsx";
-import {Light} from "./Light.tsx";
+import {Jail} from "./models/Jail.tsx";
+import {Dollar} from "./models/Dollar.tsx";
+import {GoldPlate} from "./models/GoldPlate.tsx";
+import {Light} from "./models/Light.tsx";
 import AnimatedClouds from "./AnimatedClouds.tsx";
 import {CheckoutProvider} from "@stripe/react-stripe-js/checkout";
 import {loadStripe} from "@stripe/stripe-js";

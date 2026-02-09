@@ -1,10 +1,10 @@
-import {GoldPlate} from "./GoldPlate.tsx";
+import {GoldPlate} from "./models/GoldPlate.tsx";
 import {Container, Content, Text} from "@react-three/uikit";
 import {type ChangeEvent, useCallback, useEffect, useMemo, useState} from "react";
 import {Html} from "@react-three/drei";
-import {Dollar} from "./Dollar.tsx";
+import {Dollar} from "./models/Dollar.tsx";
 import type {ThreeEvent} from "@react-three/fiber";
-import {Light} from "./Light.tsx";
+import {Light} from "./models/Light.tsx";
 import {type EmailState, OFF, VALID} from "./EmailState.tsx";
 
 export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelState:(state:boolean)=>void}) {

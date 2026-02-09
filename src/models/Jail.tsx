@@ -8,7 +8,7 @@ import * as THREE from 'three'
 import {Box, useGLTF, useKTX2} from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import LoginOrDonateMenu from "./LoginOrDonateMenu.tsx";
+import LoginOrDonateMenu from "../LoginOrDonateMenu.tsx";
 import {useState} from "react";
 
 type GLTFResult = GLTF & {
