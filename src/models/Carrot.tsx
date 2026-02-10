@@ -5,26 +5,24 @@ Files: carrot.glb [8.56KB] > /home/jax/Desktop/personal/philanthropy-clinic/carr
 */
 
 import * as THREE from 'three'
-import { useGLTF } from '@react-three/drei'
+import {Mesh} from 'three'
+import {useGLTF, useKTX2} from '@react-three/drei'
 import type {GLTF} from 'three-stdlib';
 import type {JSX} from "react/jsx-runtime";
 import {useEffect, useRef, useState} from "react";
-import {Mesh} from "three";
 import {useFrame} from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
-    Cone: THREE.Mesh
-    Cone_1: THREE.Mesh
+    carrot: THREE.Mesh
   }
   materials: {
     carrot: THREE.MeshStandardMaterial
-    leaf: THREE.MeshStandardMaterial
   }
 }
 
 export function Carrot(props: JSX.IntrinsicElements['group'] & {jailState?: boolean}) {
-  const { nodes, materials } = useGLTF('/carrot-transformed.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/carrot-transformed.glb') as unknown as GLTFResult
 
   const [hovered, setHovered] = useState(false)
 
@@ -35,6 +33,10 @@ export function Carrot(props: JSX.IntrinsicElements['group'] & {jailState?: bool
     }
   });
 
+  const [baseMap] = useKTX2([
+    '/textures/carrot.ktx2',
+  ])
+
   useEffect(() => {
     if (!props.jailState) return;
     document.body.style.cursor = hovered ? "pointer" : "default";
@@ -42,8 +44,9 @@ export function Carrot(props: JSX.IntrinsicElements['group'] & {jailState?: bool
 
   return (
     <group {...props} dispose={null} ref={groupRef} onPointerOver={()=>setHovered(true)} onPointerOut={() => setHovered(false)}>
-      <mesh geometry={nodes.Cone.geometry} material={materials.carrot} />
-      <mesh geometry={nodes.Cone_1.geometry} material={materials.leaf} />
+      <mesh geometry={nodes.carrot.geometry}>
+        <meshStandardMaterial map={baseMap}/>
+      </mesh>
     </group>
   )
 }

@@ -89,7 +89,7 @@ export function PiggyBank({curAnim, ...props}: PiggyBankProps) {
   return <primitive object={clone} {...props} />
 }
 
-useKTX2.preload("/textures/pig.ktx2")
-useKTX2.preload("/textures/pig-eye.ktx2")
-useKTX2.preload("/textures/pig-pupil.ktx2")
+useKTX2.preload("/textures/pig/base.ktx2")
+useKTX2.preload("/textures/pig/eye.ktx2")
+useKTX2.preload("/textures/pig/pupil.ktx2")
 useGLTF.preload('/pig-transformed.glb')
