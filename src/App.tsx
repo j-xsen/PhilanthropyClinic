@@ -64,7 +64,7 @@ function App() {
             <CheckoutProvider stripe={stripePromise} options={{clientSecret:promise}}>
             <Canvas gl={{localClippingEnabled: true}}>
                 <Suspense>
-                    <Sky rayleigh={1} turbidity={0} sunPosition={[200, 60, 1000]}/>
+                    <Sky rayleigh={0.5} turbidity={10} sunPosition={[0, 1, 10]}/>
                     <AnimatedClouds/>
                     <group visible={false}>
                         <Light emailValid={0}/>

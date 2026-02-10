@@ -39,6 +39,8 @@ export function PiggyBank({curAnim, ...props}: PiggyBankProps) {
           pig.needsUpdate = true
 
           if (mat instanceof MeshPhysicalMaterial) {
+            mat.metalness=0
+            mat.roughness=1
             mat.map = pig
             mat.needsUpdate = true
           }
@@ -51,6 +53,8 @@ export function PiggyBank({curAnim, ...props}: PiggyBankProps) {
 
           if (mat instanceof MeshStandardMaterial) {
             mat.map = eye
+            mat.roughness=0
+            mat.metalness=0.3
             mat.needsUpdate = true
           }
         }
