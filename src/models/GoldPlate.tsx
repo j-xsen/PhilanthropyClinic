@@ -5,7 +5,7 @@ Files: gold-plate.glb [1.75MB] > /home/jax/Desktop/personal/philanthropy-clinic/
 */
 
 import * as THREE from 'three'
-import { useGLTF } from '@react-three/drei'
+import {useGLTF, useKTX2} from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
 
@@ -13,16 +13,18 @@ type GLTFResult = GLTF & {
   nodes: {
     Cube: THREE.Mesh
   }
-  materials: {
-    ['pc-mat']: THREE.MeshStandardMaterial
-  }
 }
 
 export function GoldPlate(props: JSX.IntrinsicElements['group']) {
-  const { nodes, materials } = useGLTF('/gold-plate-transformed.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/gold-plate-transformed.glb') as unknown as GLTFResult
+  const [plateMap] = useKTX2([
+    '/textures/plate.ktx2',
+  ])
   return (
     <group {...props} dispose={null}>
-      <mesh geometry={nodes.Cube.geometry} material={materials['pc-mat']} />
+      <mesh geometry={nodes.Cube.geometry} >
+          <meshStandardMaterial map={plateMap} metalness={1} roughness={0.65} />
+      </mesh>
     </group>
   )
 }

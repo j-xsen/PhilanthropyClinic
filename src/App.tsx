@@ -1,9 +1,9 @@
 import './App.css'
-import {Canvas, useLoader} from "@react-three/fiber";
+import {Canvas} from "@react-three/fiber";
 import {PiggyBank} from "./models/PiggyBank.tsx";
-import {DragControls, Environment, Plane, Sky} from "@react-three/drei";
+import {DragControls, Environment, Sky} from "@react-three/drei";
 import {Carrot} from "./models/Carrot.tsx";
-import {Matrix4, TextureLoader} from "three";
+import {Matrix4} from "three";
 import {Suspense, useMemo, useRef, useState} from "react";
 import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "@react-three/rapier";
 import {Jail} from "./models/Jail.tsx";
@@ -13,6 +13,7 @@ import {Light} from "./models/Light.tsx";
 import AnimatedClouds from "./AnimatedClouds.tsx";
 import {CheckoutProvider} from "@stripe/react-stripe-js/checkout";
 import {loadStripe} from "@stripe/stripe-js";
+import Grass from "./Grass.tsx";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
 
@@ -49,8 +50,6 @@ function App() {
     const piggyRef = useRef(null!);
     const carrotRef = useRef<RapierRigidBody>(null!);
 
-    const grassColorMap = useLoader(TextureLoader, 'textures/grass-color.avif');
-
     const promise = useMemo(async () => {
         const res = await fetch('/api/actions/checkout', {
             method: 'POST',
@@ -84,9 +83,7 @@ function App() {
                             </RigidBody>
                         </DragControls>
                         <RigidBody name="plane" colliders={"cuboid"} restitution={0}>
-                            <Plane args={[60, 20]} rotation={[-1.5, 0, 0]} position={[0, -4, -4]}>
-                                <meshStandardMaterial color={[0, 0.25, 0]} map={grassColorMap}/>
-                            </Plane>
+                            <Grass/>
                         </RigidBody>
                     </Physics>
                 </Suspense>
