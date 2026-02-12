@@ -14,6 +14,7 @@ import AnimatedClouds from "./AnimatedClouds.tsx";
 import {CheckoutProvider} from "@stripe/react-stripe-js/checkout";
 import {loadStripe} from "@stripe/stripe-js";
 import Grass from "./Grass.tsx";
+import Fences from "./Fences.tsx";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
 
@@ -70,6 +71,7 @@ function App() {
                         <Dollar amount={0} pressed={false}/>
                         <GoldPlate/>
                     </group>
+                    <Fences/>
                     <Physics>
                         <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef}
                                    onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
