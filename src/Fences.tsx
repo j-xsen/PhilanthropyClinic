@@ -4,7 +4,7 @@ import {useEffect} from "react";
 import {SRGBColorSpace} from "three";
 
 function Fences(){
-    const xSpacing=3.9
+    const xSpacing=4
 
     const [fenceMap] = useKTX2([
         '/textures/fence.ktx2',
