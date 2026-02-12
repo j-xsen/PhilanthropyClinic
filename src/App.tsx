@@ -10,11 +10,11 @@ import {Jail} from "./models/Jail.tsx";
 import {Dollar} from "./models/Dollar.tsx";
 import {GoldPlate} from "./models/GoldPlate.tsx";
 import {Light} from "./models/Light.tsx";
-import AnimatedClouds from "./AnimatedClouds.tsx";
+import AnimatedClouds from "./groups/AnimatedClouds.tsx";
 import {CheckoutProvider} from "@stripe/react-stripe-js/checkout";
 import {loadStripe} from "@stripe/stripe-js";
-import Grass from "./Grass.tsx";
-import Fences from "./Fences.tsx";
+import Grass from "./groups/Grass.tsx";
+import Fences from "./groups/Fences.tsx";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
 

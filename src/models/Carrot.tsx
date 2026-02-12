@@ -22,7 +22,7 @@ type GLTFResult = GLTF & {
 }
 
 export function Carrot(props: JSX.IntrinsicElements['group'] & {jailState?: boolean}) {
-  const { nodes } = useGLTF('/carrot-transformed.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/models/carrot-transformed.glb') as unknown as GLTFResult
 
   const [hovered, setHovered] = useState(false)
 
@@ -51,4 +51,4 @@ export function Carrot(props: JSX.IntrinsicElements['group'] & {jailState?: bool
   )
 }
 
-useGLTF.preload('/carrot-transformed.glb')
+useGLTF.preload('/models/carrot-transformed.glb')

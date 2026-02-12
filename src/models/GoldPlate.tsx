@@ -16,7 +16,7 @@ type GLTFResult = GLTF & {
 }
 
 export function GoldPlate(props: JSX.IntrinsicElements['group']) {
-  const { nodes } = useGLTF('/gold-plate-transformed.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/models/gold-plate-transformed.glb') as unknown as GLTFResult
   const [plateMap] = useKTX2([
     '/textures/plate.ktx2',
   ])
@@ -29,4 +29,4 @@ export function GoldPlate(props: JSX.IntrinsicElements['group']) {
   )
 }
 
-useGLTF.preload('/gold-plate-transformed.glb')
+useGLTF.preload('/models/gold-plate-transformed.glb')

@@ -8,7 +8,7 @@ import * as THREE from 'three'
 import {Box, useGLTF, useKTX2} from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import LoginOrDonateMenu from "../LoginOrDonateMenu.tsx";
+import LoginOrDonateMenu from "../groups/LoginOrDonateMenu.tsx";
 import {useState} from "react";
 
 type GLTFResult = GLTF & {
@@ -18,7 +18,7 @@ type GLTFResult = GLTF & {
 }
 
 export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolean}) {
-  const { nodes } = useGLTF('/jail-transformed.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/models/jail-transformed.glb') as unknown as GLTFResult
 
   const jailMap = useKTX2('textures/jail.ktx2');
 
@@ -54,4 +54,4 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
 }
 
 useKTX2.preload("/textures/jail.ktx2")
-useGLTF.preload('/jail-transformed.glb')
+useGLTF.preload('/models/jail-transformed.glb')

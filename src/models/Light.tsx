@@ -27,7 +27,7 @@ type GLTFResult = GLTF & {
 
 
 export function Light(props: JSX.IntrinsicElements['group'] & {emailValid:EmailState}) {
-    const {nodes, materials} = useGLTF('/light-transformed.glb') as unknown as GLTFResult
+    const {nodes, materials} = useGLTF('/models/light-transformed.glb') as unknown as GLTFResult
 
     const emitMat = useMemo(()=>new THREE.MeshStandardMaterial({
         emissiveIntensity: 50,
@@ -61,4 +61,4 @@ export function Light(props: JSX.IntrinsicElements['group'] & {emailValid:EmailS
     )
 }
 
-useGLTF.preload('/light-transformed.glb')
+useGLTF.preload('/models/light-transformed.glb')

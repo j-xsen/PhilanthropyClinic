@@ -18,7 +18,7 @@ type GLTFResult = GLTF & {
 }
 
 export function Dollar(props: JSX.IntrinsicElements['group'] & {amount: number, pressed: boolean}) {
-  const { nodes } = useGLTF('/dollar-transformed.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/models/dollar-transformed.glb') as unknown as GLTFResult
 
   const geometry = useMemo(()=>nodes.Cube.geometry,[nodes])
 
@@ -76,7 +76,7 @@ export function Dollar(props: JSX.IntrinsicElements['group'] & {amount: number, 
   )
 }
 
-useGLTF.preload("/dollar-transformed.glb")
+useGLTF.preload("/models/dollar-transformed.glb")
 useKTX2.preload("/textures/1dollar.ktx2")
 useKTX2.preload("/textures/5dollar.ktx2")
 useKTX2.preload("/textures/10dollar.ktx2")

@@ -1,4 +1,4 @@
-import Fence from "./Fence"
+import Fence from "./Fence.tsx"
 import {useKTX2} from "@react-three/drei";
 import {useEffect} from "react";
 import {SRGBColorSpace} from "three";

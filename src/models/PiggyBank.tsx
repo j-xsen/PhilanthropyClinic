@@ -9,7 +9,7 @@ type PiggyBankProps = JSX.IntrinsicElements['group'] & {
 }
 
 export function PiggyBank({curAnim, ...props}: PiggyBankProps) {
-  const { scene, animations } = useGLTF('/pig-transformed.glb')
+  const { scene, animations } = useGLTF('/models/pig-transformed.glb')
 
   const clone = useMemo(
       () => SkeletonUtils.clone(scene),
@@ -54,4 +54,4 @@ export function PiggyBank({curAnim, ...props}: PiggyBankProps) {
   return <primitive object={clone} {...props} />
 }
 
-useGLTF.preload('/pig-transformed.glb')
+useGLTF.preload('/models/pig-transformed.glb')
