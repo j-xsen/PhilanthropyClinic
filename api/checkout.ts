@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { stripe } from '../src/lib/stripe'
+import Stripe from "stripe";
 
 type CheckoutOptions = {
   amount: number
@@ -31,6 +31,8 @@ async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const url = process.env.VERCEL_URL ? process.env.VERCEL_URL : "http://localhost:5173/"
+
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
     const session = await stripe.checkout.sessions.create({
       line_items: [
