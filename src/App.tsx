@@ -1,7 +1,7 @@
 import './App.css'
 import {Canvas} from "@react-three/fiber";
 import {PiggyBank} from "./models/PiggyBank.tsx";
-import {DragControls, Sky} from "@react-three/drei";
+import {DragControls, OrbitControls, Sky} from "@react-three/drei";
 import {Carrot} from "./models/Carrot.tsx";
 import {Matrix4} from "three";
 import {Suspense, useMemo, useRef, useState} from "react";
@@ -15,6 +15,7 @@ import {CheckoutProvider} from "@stripe/react-stripe-js/checkout";
 import {loadStripe} from "@stripe/stripe-js";
 import Grass from "./groups/Grass.tsx";
 import Fences from "./groups/Fences.tsx";
+import PlaceCard from "./groups/PlaceCard.tsx";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
 
@@ -64,6 +65,7 @@ function App() {
             <CheckoutProvider stripe={stripePromise} options={{clientSecret:promise}}>
             <Canvas gl={{localClippingEnabled: true}} shadows>
                 <Suspense>
+                    <OrbitControls/>
                     <Sky rayleigh={0.5} turbidity={10} sunPosition={[0, 1, 10]}/>
                     <AnimatedClouds/>
                     <group visible={false}>
@@ -72,6 +74,7 @@ function App() {
                         <GoldPlate/>
                     </group>
                     <Fences/>
+                    <PlaceCard position={[-1,-3.9,-1.25]} rotation={[-.3,-.1,0]}/>
                     <Physics>
                         <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef}
                                    onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
@@ -88,8 +91,8 @@ function App() {
                             <Grass/>
                         </RigidBody>
                     </Physics>
-                    <ambientLight intensity={1}/>
-                    <pointLight castShadow position={[3,5,4]}  lookAt={[0, -2, -4]} intensity={500}/>
+                    <ambientLight intensity={0.5}/>
+                    <directionalLight castShadow position={[0,10,5]} intensity={5}/>
                 </Suspense>
             </Canvas>
             </CheckoutProvider>
