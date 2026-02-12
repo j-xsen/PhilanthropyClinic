@@ -1,7 +1,7 @@
 import './App.css'
 import {Canvas} from "@react-three/fiber";
 import {PiggyBank} from "./models/PiggyBank.tsx";
-import {DragControls, Environment, Sky} from "@react-three/drei";
+import {DragControls, Sky} from "@react-three/drei";
 import {Carrot} from "./models/Carrot.tsx";
 import {Matrix4} from "three";
 import {Suspense, useMemo, useRef, useState} from "react";
@@ -62,7 +62,7 @@ function App() {
     return (
         <div id={"canvas-container"}>
             <CheckoutProvider stripe={stripePromise} options={{clientSecret:promise}}>
-            <Canvas gl={{localClippingEnabled: true}}>
+            <Canvas gl={{localClippingEnabled: true}} shadows>
                 <Suspense>
                     <Sky rayleigh={0.5} turbidity={10} sunPosition={[0, 1, 10]}/>
                     <AnimatedClouds/>
@@ -75,7 +75,7 @@ function App() {
                     <Physics>
                         <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef}
                                    onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
-                            <PiggyBank ref={piggyRef} curAnim={curAnim} position={[0, -2, -4]} rotation={[0, 0.5, 0]}/>
+                            <PiggyBank ref={piggyRef} castShadow curAnim={curAnim} position={[0, -2, -4]} rotation={[0, 0.5, 0]}/>
                         </RigidBody>
                         <Jail position={[0, 2, -4]} rotation={[0.1, 0, 0]}/>
                         <DragControls autoTransform={false} axisLock="z" onDrag={check_carrot_on_pig}>
@@ -88,8 +88,9 @@ function App() {
                             <Grass/>
                         </RigidBody>
                     </Physics>
+                    <ambientLight intensity={1}/>
+                    <pointLight castShadow position={[3,5,4]}  lookAt={[0, -2, -4]} intensity={500}/>
                 </Suspense>
-                <Environment files={"studio_small_02_1k.exr"}/>
             </Canvas>
             </CheckoutProvider>
         </div>

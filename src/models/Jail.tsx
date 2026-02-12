@@ -46,7 +46,7 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
     <group {...props} dispose={null}>
         <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave} onClick={onClick}/>
       <mesh geometry={nodes.jail.geometry}>
-          <meshStandardMaterial map={jailMap}/>
+          <meshStandardMaterial map={jailMap} roughness={.2} metalness={0.3}/>
       </mesh>
     </group>
     <LoginOrDonateMenu panelState={panelState} setPanelState={setPanelState} /></>

@@ -25,6 +25,7 @@ export function PiggyBank({curAnim, ...props}: PiggyBankProps) {
 
     clone.traverse((o) => {
       const mesh = o as Mesh
+      mesh.castShadow=true
 
       if (!mesh.isMesh || !mesh.material) return
 
