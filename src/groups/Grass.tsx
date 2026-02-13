@@ -6,7 +6,7 @@ function Grass (){
     ])
     return(
     <Plane receiveShadow args={[60, 20]} rotation={[-1.5, 0, 0]} position={[0, -4, -4]}>
-        <meshStandardMaterial color={[1, 1, 1]} map={grassMap}/>
+        <meshStandardMaterial color={[.5, .5, .5]} map={grassMap}/>
     </Plane>
     )
 }
