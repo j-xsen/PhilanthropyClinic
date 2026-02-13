@@ -1,7 +1,7 @@
 import './App.css'
 import {Canvas} from "@react-three/fiber";
 import {PiggyBank} from "./models/PiggyBank.tsx";
-import {DragControls, OrbitControls, Sky} from "@react-three/drei";
+import {DragControls, Sky} from "@react-three/drei";
 import {Carrot} from "./models/Carrot.tsx";
 import {Matrix4} from "three";
 import {Suspense, useMemo, useRef, useState} from "react";
@@ -47,7 +47,6 @@ function App() {
         }
     }
 
-
     const piggyRigidRef = useRef<RapierRigidBody>(null!);
     const piggyRef = useRef(null!);
     const carrotRef = useRef<RapierRigidBody>(null!);
@@ -62,39 +61,41 @@ function App() {
 
     return (
         <div id={"canvas-container"}>
-            <CheckoutProvider stripe={stripePromise} options={{clientSecret:promise}}>
-            <Canvas gl={{localClippingEnabled: true}} shadows>
-                <Suspense>
-                    <OrbitControls/>
-                    <Sky rayleigh={0.5} turbidity={10} sunPosition={[0, 1, 10]}/>
-                    <AnimatedClouds/>
-                    <group visible={false}>
-                        <Light emailValid={0}/>
-                        <Dollar amount={0} pressed={false}/>
-                        <GoldPlate/>
-                    </group>
-                    <Fences/>
-                    <PlaceCard position={[-1,-3.9,-1.25]} rotation={[-.3,-.1,0]}/>
-                    <Physics>
-                        <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef}
-                                   onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
-                            <PiggyBank ref={piggyRef} castShadow curAnim={curAnim} position={[0, -2, -4]} rotation={[0, 0.5, 0]}/>
-                        </RigidBody>
-                        <Jail position={[0, 2, -4]} rotation={[0.1, 0, 0]}/>
-                        <DragControls autoTransform={false} axisLock="z" onDrag={check_carrot_on_pig}>
-                            <RigidBody name={"carrot"} position={[0, 2, -4]} colliders={"cuboid"} gravityScale={0}
-                                       ref={carrotRef} sensor>
-                                <Carrot jailState={jailState}/>
+            <CheckoutProvider stripe={stripePromise} options={{clientSecret: promise}}>
+                <Canvas gl={{localClippingEnabled: true}} shadows>
+                    <Suspense>
+                        <Sky rayleigh={0.5} turbidity={10} sunPosition={[0, 1, 10]}/>
+                        <AnimatedClouds/>
+                        <group visible={false}>
+                            <Light emailValid={0}/>
+                            <Dollar amount={0} pressed={false}/>
+                            <GoldPlate/>
+                        </group>
+                        <Fences position={[0, -2.67, -12]}/>
+                        <PlaceCard position={[-1, -3.9, -1.25]} rotation={[-.3, -.1, 0]}/>
+                        <Physics>
+                            <RigidBody colliders={"cuboid"} name={"piggy"} ref={piggyRigidRef}
+                                       onIntersectionEnter={pig_collide} onIntersectionExit={pig_end_collide}>
+                                <PiggyBank ref={piggyRef} castShadow curAnim={curAnim} position={[0, -2, -4]}
+                                           rotation={[0, 0.5, 0]}/>
                             </RigidBody>
-                        </DragControls>
-                        <RigidBody name="plane" colliders={"cuboid"} restitution={0}>
-                            <Grass/>
-                        </RigidBody>
-                    </Physics>
-                    <ambientLight intensity={0.5}/>
-                    <directionalLight castShadow position={[0,10,5]} intensity={5}/>
-                </Suspense>
-            </Canvas>
+                            <Jail position={[0, 2, -4]} rotation={[0.1, 0, 0]}/>
+                            <DragControls autoTransform={false} axisLock="z" onDrag={check_carrot_on_pig}>
+                                <RigidBody name={"carrot"} position={[0, 2, -4]} colliders={"cuboid"} gravityScale={0}
+                                           ref={carrotRef} sensor>
+                                    <Carrot jailState={jailState}/>
+                                </RigidBody>
+                            </DragControls>
+                            <RigidBody name="plane" colliders={"cuboid"} restitution={0}>
+                                <Grass/>
+                            </RigidBody>
+                        </Physics>
+                        <ambientLight intensity={0.5}/>
+                        <directionalLight castShadow
+                                          position={[2, 2, 1]}
+                                          intensity={5}/>
+                    </Suspense>
+                </Canvas>
             </CheckoutProvider>
         </div>
     )
