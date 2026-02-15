@@ -5,81 +5,72 @@ Files: 1dollar.glb [285.8KB] > /home/jax/Desktop/personal/philanthropy-clinic/do
 */
 
 import * as THREE from 'three'
-import {useGLTF, useKTX2} from '@react-three/drei'
-import type { GLTF } from 'three-stdlib'
+import {Color, Texture, Vector3} from 'three'
+import {useGLTF} from '@react-three/drei'
+import type {GLTF} from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import {useEffect, useMemo} from "react";
-import {Color} from "three";
+import {useEffect, useMemo, useState} from "react";
 
 type GLTFResult = GLTF & {
-  nodes: {
-    Cube: THREE.Mesh
-  }
+    nodes: {
+        Cube: THREE.Mesh
+    }
 }
 
-export function Dollar(props: JSX.IntrinsicElements['group'] & {amount: number, pressed: boolean}) {
-  const { nodes } = useGLTF('/models/dollar-transformed.glb') as unknown as GLTFResult
+export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number, pressed: boolean, map:Texture, emit?:Texture }) {
+    const {nodes} = useGLTF('/models/dollar-transformed.glb') as unknown as GLTFResult
 
-  const geometry = useMemo(()=>nodes.Cube.geometry,[nodes])
+    const geometry = useMemo(() => nodes.Cube.geometry, [nodes])
 
-  const mouseEnter = () => {
-    document.body.style.cursor = "pointer";
-  }
+    const mouseEnter = () => {
+        if(amount===99 && props.pressed) return
+        document.body.style.cursor = "pointer";
+    }
 
-  const mouseExit = () => {
-    document.body.style.cursor = "default";
-  }
+    const mouseExit = () => {
+        document.body.style.cursor = "default";
+    }
 
-  const [oneMap, fiveMap, tenMap] = useKTX2(['/textures/1dollar.ktx2',"/textures/5dollar.ktx2","/textures/10dollar.ktx2"])
-  const [emitOne,emitFive, emitTen] = useKTX2(['/textures/blank1dollar.ktx2','/textures/blank5dollar.ktx2',"/textures/blank10dollar.ktx2"])
-  oneMap.flipY=false
-  oneMap.colorSpace = THREE.SRGBColorSpace
-  fiveMap.flipY=false
-  fiveMap.colorSpace = THREE.SRGBColorSpace
-  tenMap.flipY=false
-  tenMap.colorSpace = THREE.SRGBColorSpace
-  emitOne.flipY=false
-  emitFive.flipY=false
-  emitTen.flipY=false
+    const {amount, map, emit, pressed} = props
 
-  const {amount} = props
-  const {map,emit} = useMemo(()=>{
-    if(amount===1) return {map:oneMap, emit:emitOne}
-    if(amount===5) return {map:fiveMap, emit:emitFive}
-    return {map:tenMap, emit:emitTen}
-  },[amount, oneMap, fiveMap, tenMap, emitOne, emitFive, emitTen])
+    const material = useMemo(() => {
+        return new THREE.MeshStandardMaterial({
+            color: new Color(.2, .2, .2),
+            emissive: new Color(1, 1, 1),
+        })
+    }, [])
 
-  const material = useMemo(() => {
-    const mat = new THREE.MeshStandardMaterial({
-      color:new Color(.2,.2,.2),
-      emissive: new Color(1,1,1)
-    })
-    return mat
-  }, [])
 
-  useEffect(()=>{
-    material.map = map
-    material.emissiveMap = emit
-    material.needsUpdate = true
-  },[map, emit, material])
+    const [scale, setScale] = useState(new THREE.Vector3(0.055, 0.055, 0.055))
 
-  const {pressed} = props
-  useEffect(()=>{
-    material.emissiveIntensity = pressed ? 0 : 10
-  }, [pressed, material])
+    useEffect(() => {
+        if (amount === 99) {
+            setScale(new Vector3(0.12, .055, .055))
+        }
+    }, [amount, setScale])
 
-  return (
-      <mesh {...props} geometry={geometry} scale={props.pressed ? [.055,0.005,0.055] : [.055,.055,.055]}
-            name={props.amount as unknown as string} material={material}
-            onPointerEnter={mouseEnter} onPointerLeave={mouseExit}
-      />
-  )
+    useEffect(() => {
+        material.map = map
+        if(amount===99) material.color = new Color(.75, .75, .75)
+        if(emit) material.emissiveMap = emit
+        material.needsUpdate = true
+    }, [emit, map, material, amount])
+
+    useEffect(() => {
+        if (amount === 99) {
+            material.emissiveIntensity=0
+            material.color = pressed ? new Color(.25, .25, .25) : new Color(.75, .75, .75)
+        } else {
+            material.emissiveIntensity = pressed ? 0 : 10
+        }
+    }, [pressed, material, amount])
+
+    return (
+        <mesh {...props} geometry={geometry} scale={props.pressed ? [scale.x, scale.y / 2, scale.z] : scale}
+              name={props.amount as unknown as string} material={material}
+              onPointerEnter={mouseEnter} onPointerLeave={mouseExit}
+        />
+    )
 }
 
 useGLTF.preload("/models/dollar-transformed.glb")
-useKTX2.preload("/textures/1dollar.ktx2")
-useKTX2.preload("/textures/5dollar.ktx2")
-useKTX2.preload("/textures/10dollar.ktx2")
-useKTX2.preload("/textures/blank1dollar.ktx2")
-useKTX2.preload("/textures/blank5dollar.ktx2")
-useKTX2.preload("/textures/blank10dollar.ktx2")

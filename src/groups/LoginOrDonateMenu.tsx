@@ -1,7 +1,7 @@
 import {GoldPlate} from "../models/GoldPlate.tsx";
 import {Container, Content, Text} from "@react-three/uikit";
 import {type ChangeEvent, useCallback, useEffect, useMemo, useState} from "react";
-import {Html} from "@react-three/drei";
+import {Html, useKTX2} from "@react-three/drei";
 import {Dollar} from "../models/Dollar.tsx";
 import type {ThreeEvent} from "@react-three/fiber";
 import {Light} from "../models/Light.tsx";
@@ -15,13 +15,13 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
     const [emailValid, setEmailValid] = useState<EmailState>(OFF);
 
     // exit
-    const [exitColor, setExitColor] = useState<string>("#f00");
+    const [exitColor, setExitColor] = useState<string>("#9a1212");
     const exitMouseEnter = useCallback(() => {
-        setExitColor("#ef5b5b")
+        setExitColor("#d60b0b")
         document.body.style.cursor = "pointer";
     },[])
     const exitMouseExit = useCallback(() => {
-        setExitColor("#f00")
+        setExitColor("#9a1212")
         document.body.style.cursor = "default";
     },[])
     const exitMouseDown = useCallback(() => {
@@ -37,6 +37,14 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         setEmailValid(pattern.test(e.target.value) ? VALID : OFF)
     },[])
+
+    const [oneMap, fiveMap, tenMap, submitMap] = useKTX2(['/textures/1dollar.ktx2',
+        "/textures/5dollar.ktx2",
+        "/textures/10dollar.ktx2",
+        "/textures/submit.ktx2"])
+    const [emitOne, emitFive, emitTen] = useKTX2(['/textures/blank1dollar.ktx2',
+        '/textures/blank5dollar.ktx2',
+        "/textures/blank10dollar.ktx2"])
 
     const emailInput = useMemo(() => (
         <Html>
@@ -59,13 +67,15 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         setSelectedAmount(prev=>prev===selected?null:selected)
     }
 
-    const dollarScale = 0.05
+    if(!oneMap || !fiveMap || !tenMap || !submitMap || !emitOne || !emitFive || !emitTen) return <></>
+
     return <>
         <group position={[0,0,2.9]}>
         <GoldPlate/>
-            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} scale={dollarScale} onClick={amountBtnClick} pressed={selectedAmount===1}/>
-            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} scale={dollarScale} onClick={amountBtnClick} pressed={selectedAmount===5}/>
-            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} scale={dollarScale} onClick={amountBtnClick} pressed={selectedAmount===10}/>
+            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} onClick={amountBtnClick} pressed={selectedAmount===1} map={oneMap} emit={emitOne}/>
+            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} onClick={amountBtnClick} pressed={selectedAmount===5} map={fiveMap} emit={emitFive}/>
+            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} onClick={amountBtnClick} pressed={selectedAmount===10} map={tenMap} emit={emitTen}/>
+            <Dollar amount={99} position={[.3,-0.2,0.5]} rotation={[1.35,0,.1]} onClick={amountBtnClick} pressed={emailValid===OFF} map={submitMap}/>
             <Light emailValid={emailValid} scale={0.045} rotation={[0,1.56,1.56]} position={[0.55,0.05,.17]}/>
         </group>
     <group position={[0, 0, 3.1]}>
@@ -85,3 +95,11 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
     </group>
     </>;
 }
+
+useKTX2.preload("/textures/1dollar.ktx2")
+useKTX2.preload("/textures/5dollar.ktx2")
+useKTX2.preload("/textures/10dollar.ktx2")
+useKTX2.preload("/textures/submit.ktx2")
+useKTX2.preload("/textures/blank1dollar.ktx2")
+useKTX2.preload("/textures/blank5dollar.ktx2")
+useKTX2.preload("/textures/blank10dollar.ktx2")
