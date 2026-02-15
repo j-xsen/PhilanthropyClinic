@@ -72,10 +72,10 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
     return <>
         <group position={[0,0,2.9]}>
         <GoldPlate/>
-            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} onClick={amountBtnClick} pressed={selectedAmount===1} map={oneMap} emit={emitOne}/>
-            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} onClick={amountBtnClick} pressed={selectedAmount===5} map={fiveMap} emit={emitFive}/>
-            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} onClick={amountBtnClick} pressed={selectedAmount===10} map={tenMap} emit={emitTen}/>
-            <Dollar amount={99} position={[.3,-0.2,0.5]} rotation={[1.35,0,.1]} onClick={amountBtnClick} pressed={emailValid===OFF} map={submitMap}/>
+            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} onClick={amountBtnClick} pressed={selectedAmount===1} textMap={oneMap} emit={emitOne}/>
+            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} onClick={amountBtnClick} pressed={selectedAmount===5} textMap={fiveMap} emit={emitFive}/>
+            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} onClick={amountBtnClick} pressed={selectedAmount===10} textMap={tenMap} emit={emitTen}/>
+            <Dollar amount={99} position={[.3,-0.2,0.5]} rotation={[1.35,0,.1]} onClick={amountBtnClick} pressed={emailValid===OFF} textMap={submitMap}/>
             <Light emailValid={emailValid} scale={0.045} rotation={[0,1.56,1.56]} position={[0.55,0.05,.17]}/>
         </group>
     <group position={[0, 0, 3.1]}>

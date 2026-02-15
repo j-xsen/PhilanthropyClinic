@@ -17,7 +17,7 @@ type GLTFResult = GLTF & {
     }
 }
 
-export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number, pressed: boolean, map:Texture, emit?:Texture }) {
+export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number, pressed: boolean, textMap:Texture, emit?:Texture }) {
     const {nodes} = useGLTF('/models/dollar-transformed.glb') as unknown as GLTFResult
 
     const geometry = useMemo(() => nodes.Cube.geometry, [nodes])
@@ -31,7 +31,7 @@ export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number,
         document.body.style.cursor = "default";
     }
 
-    const {amount, map, emit, pressed} = props
+    const {amount, textMap, emit, pressed} = props
 
     const material = useMemo(() => {
         return new THREE.MeshStandardMaterial({
@@ -50,11 +50,11 @@ export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number,
     }, [amount, setScale])
 
     useEffect(() => {
-        material.map = map
+        material.map = textMap
         if(amount===99) material.color = new Color(.75, .75, .75)
         if(emit) material.emissiveMap = emit
         material.needsUpdate = true
-    }, [emit, map, material, amount])
+    }, [emit, textMap, material, amount])
 
     useEffect(() => {
         if (amount === 99) {

@@ -7,7 +7,6 @@ import {Matrix4} from "three";
 import {Suspense, useRef, useState} from "react";
 import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "@react-three/rapier";
 import {Jail} from "./models/Jail.tsx";
-import {Dollar} from "./models/Dollar.tsx";
 import {GoldPlate} from "./models/GoldPlate.tsx";
 import {Light} from "./models/Light.tsx";
 import AnimatedClouds from "./groups/AnimatedClouds.tsx";
@@ -55,7 +54,6 @@ function App() {
                     <AnimatedClouds/>
                     <group visible={false}>
                         <Light emailValid={0}/>
-                        <Dollar amount={0} pressed={false}/>
                         <GoldPlate/>
                     </group>
                     <Fences position={[0, -2.67, -12]}/>
