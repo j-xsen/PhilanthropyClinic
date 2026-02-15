@@ -6,7 +6,7 @@ type CheckoutOptions = {
   name: string
 }
 
-const DONATIONS: Record<number, CheckoutOptions> = {
+export const DONATIONS: Record<number, CheckoutOptions> = {
   1: { amount: 100, name: '$1 Philanthropy' },
   5: { amount: 500, name: '$5 Philanthropy' },
   10: { amount: 1000, name: '$10 Philanthropy' },
