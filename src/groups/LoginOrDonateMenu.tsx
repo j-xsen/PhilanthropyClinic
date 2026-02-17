@@ -46,13 +46,31 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         '/textures/blank5dollar.ktx2',
         "/textures/blank10dollar.ktx2"])
 
+    const handleSubmit = useCallback(async () => {
+        console.log("Handling submit...")
+        if(emailValid!==VALID || !selectedAmount) return
+        console.log("Valid input")
+        await fetch("/api/checkout", {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: (document.querySelector('input[name="email"]') as HTMLInputElement).value,
+                amount: selectedAmount
+            })
+        }).then(res => res.json()).then(data => {
+            if(data.url) window.location.href = data.url
+        })
+    },[emailValid, selectedAmount])
+
     const emailInput = useMemo(() => (
         <Html>
-            <form style={{width:"100%", marginTop:-5}} onSubmit={()=>{}}>
+            <form style={{width:"100%", marginTop:-5}} onSubmit={handleSubmit}>
                 <input onInput={updateInput} style={{width:175, backgroundColor: "rgba(68,68,68,0.2)", border: "hidden", fontSize:18, padding:"5px", color:"#fff"}} name={"email"} type={"email"} placeholder={"email@email.com"}></input>
             </form>
         </Html>
-    ),[updateInput])
+    ),[handleSubmit, updateInput])
 
     useEffect(() => {
         setIsVisible(props.panelState);
@@ -64,6 +82,10 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
 
     const amountBtnClick = (e: ThreeEvent<MouseEvent>) => {
         const selected = parseInt(e.eventObject.name)
+        if(selected===99) {
+            handleSubmit().then()
+            return
+        }
         setSelectedAmount(prev=>prev===selected?null:selected)
     }
 

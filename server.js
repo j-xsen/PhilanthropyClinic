@@ -3,6 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import checkoutHandler from './api/checkout.ts';
+import verifyHandler from "./api/verify.ts";
 
 const app = express();
 
@@ -17,6 +18,14 @@ app.post('/api/checkout', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+app.post('/api/verify', async (req, res) => {
+    try {
+        await verifyHandler(req, res);
+    }  catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

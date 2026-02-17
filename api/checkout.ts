@@ -1,15 +1,23 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from "stripe";
-
-type CheckoutOptions = {
-  amount: number
-  name: string
-}
+import type {CheckoutOptions} from "../src/types/CheckoutOptions";
 
 export const DONATIONS: Record<number, CheckoutOptions> = {
-  1: { amount: 100, name: '$1 Philanthropy' },
-  5: { amount: 500, name: '$5 Philanthropy' },
-  10: { amount: 1000, name: '$10 Philanthropy' },
+  1: {
+    id: 'price_1Szq3vGbKD5hD1XEJ9xkEkNF',
+    amount: 100,
+    name: '$1 Philanthropy'
+  },
+  5: {
+    id: 'price_1Szq4QGbKD5hD1XECkAem2El',
+    amount: 500,
+    name: '$5 Philanthropy'
+  },
+  10: {
+    id: 'price_1Szq4lGbKD5hD1XEVbxm6TL6',
+    amount: 1000,
+    name: '$10 Philanthropy'
+  },
 }
 
 // Vercel Serverless function handler
@@ -20,17 +28,18 @@ async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { donationId } = req.body || {}
-    const id = typeof donationId === 'string' ? Number(donationId) : donationId
+    const { amount } = req.body || {}
 
-    const donation = DONATIONS[id]
+    if (isNaN(amount)) {
+        res.status(400).json({ error: 'Invalid donation ID' })
+    }
+
+    const donation = DONATIONS[amount]
 
     if (!donation) {
       res.status(400).json({ error: 'Donation not found' })
       return
     }
-
-    const url = process.env.VERCEL_URL ? process.env.VERCEL_URL : "http://localhost:5173/"
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -49,12 +58,12 @@ async function handler(req: VercelRequest, res: VercelResponse) {
         },
       ],
       mode: 'payment',
-      success_url: url+ `?id={CHECKOUT_SESSION_ID}`,
-      cancel_url: url + `?canceled=true`,
+      success_url: `/?id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `/`,
       automatic_tax: { enabled: true },
     })
 
-    res.status(200).json({ client_secret: session.client_secret, sessionId: session.id })
+    res.json({url:session.url})
   } catch (err: unknown) {
       if(err instanceof Error) {
           console.error('Checkout error', err)
