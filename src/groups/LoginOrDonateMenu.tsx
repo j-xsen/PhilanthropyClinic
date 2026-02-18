@@ -47,9 +47,7 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         "/textures/blank10dollar.ktx2"])
 
     const handleSubmit = useCallback(async () => {
-        console.log("Handling submit...")
         if(emailValid!==VALID || !selectedAmount) return
-        console.log("Valid input")
         await fetch("/api/checkout", {
             method:'POST',
             headers: {
@@ -97,7 +95,7 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
             <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} onClick={amountBtnClick} pressed={selectedAmount===1} textMap={oneMap} emit={emitOne}/>
             <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} onClick={amountBtnClick} pressed={selectedAmount===5} textMap={fiveMap} emit={emitFive}/>
             <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} onClick={amountBtnClick} pressed={selectedAmount===10} textMap={tenMap} emit={emitTen}/>
-            <Dollar amount={99} position={[.3,-0.2,0.5]} rotation={[1.35,0,.1]} onClick={amountBtnClick} pressed={emailValid===OFF} textMap={submitMap}/>
+            <Dollar amount={99} position={[.3,-0.2,0.5]} rotation={[1.35,0,.1]} onClick={amountBtnClick} pressed={emailValid===OFF||!selectedAmount} textMap={submitMap}/>
             <Light emailValid={emailValid} scale={0.045} rotation={[0,1.56,1.56]} position={[0.55,0.05,.17]}/>
         </group>
     <group position={[0, 0, 3.1]}>

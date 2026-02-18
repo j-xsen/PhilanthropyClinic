@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from "stripe";
 import type {CheckoutOptions} from "../src/types/CheckoutOptions";
+import 'dotenv/config'
 
 export const DONATIONS: Record<number, CheckoutOptions> = {
   1: {
@@ -41,8 +42,11 @@ async function handler(req: VercelRequest, res: VercelResponse) {
       return
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+    const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY!)
 
+    const rawUrl = process.env.VERCEL_URL || 'localhost:5173'
+    const isLocal = rawUrl.startsWith('localhost')
+    const url = rawUrl.startsWith('http') ? rawUrl : `${isLocal ? 'http' : 'https'}://${rawUrl}`
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -58,8 +62,8 @@ async function handler(req: VercelRequest, res: VercelResponse) {
         },
       ],
       mode: 'payment',
-      success_url: `/?id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `/`,
+      success_url: `${url}/?id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${url}/`,
       automatic_tax: { enabled: true },
     })
 

@@ -4,7 +4,7 @@ import {PiggyBank} from "./models/PiggyBank.tsx";
 import {DragControls, Sky} from "@react-three/drei";
 import {Carrot} from "./models/Carrot.tsx";
 import {Matrix4} from "three";
-import {Suspense, useRef, useState} from "react";
+import {Suspense, useCallback, useEffect, useRef, useState} from "react";
 import {type CollisionPayload, Physics, RapierRigidBody, RigidBody, vec3} from "@react-three/rapier";
 import {Jail} from "./models/Jail.tsx";
 import {GoldPlate} from "./models/GoldPlate.tsx";
@@ -15,7 +15,9 @@ import Fences from "./groups/Fences.tsx";
 import PlaceCard from "./groups/PlaceCard.tsx";
 
 function App() {
-    const [jailState,] = useState<boolean>(false);
+    const [jailState,setJailState] = useState<boolean>(false);
+    const [sessionId, setSessionId] = useState<string | null>(null);
+    const [carrotAte, setCarrotAte] = useState<boolean>(false);
     const check_carrot_on_pig = (_localMatrix: Matrix4,
                                  deltaLocalMatrix: Matrix4) => {
         if (!jailState) return;
@@ -29,9 +31,44 @@ function App() {
     }
 
     const [curAnim, setCurAnim] = useState<"Breathe" | "Jump">("Breathe")
+    const [verifyResponse, setVerifyResponse] = useState<Response & {success:boolean} | null>(null);
+
+    const verifySessionId = useCallback(async () => {
+        return await fetch("/api/verify", {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                session_id: sessionId
+            })
+        })
+    },[sessionId])
+
+    useEffect(()=>{
+        if(verifyResponse && verifyResponse.success) {
+            setJailState(true)
+        }
+    },[verifyResponse])
+
+    useEffect(() => {
+        if(!sessionId) return
+        verifySessionId().then((res) => res.json()).then((res) => {
+            setVerifyResponse(res);
+        })
+    },[sessionId, verifySessionId])
+
+    useEffect(()=>{
+        const urlParams = new URLSearchParams(window.location.search)
+        if (urlParams.get('id')) {
+            setSessionId(urlParams.get('id'))
+        }
+    },[])
 
     const pig_collide = (payload: CollisionPayload) => {
         if (payload.other.rigidBodyObject?.name === "carrot") {
+            setCarrotAte(true);
+            document.body.style.cursor = "default";
             setCurAnim("Jump");
         }
     }
@@ -64,13 +101,17 @@ function App() {
                             <PiggyBank ref={piggyRef} castShadow curAnim={curAnim} position={[0, -2, -4]}
                                        rotation={[0, 0.5, 0]}/>
                         </RigidBody>
+                        {!jailState &&
                         <Jail position={[0, 2, -4]} rotation={[0.1, 0, 0]}/>
+                        }
+                        {!carrotAte &&
                         <DragControls autoTransform={false} axisLock="z" onDrag={check_carrot_on_pig}>
                             <RigidBody name={"carrot"} position={[0, 2, -4]} colliders={"cuboid"} gravityScale={0}
                                        ref={carrotRef} sensor>
                                 <Carrot jailState={jailState}/>
                             </RigidBody>
                         </DragControls>
+                        }
                         <RigidBody name="plane" colliders={"cuboid"} restitution={0}>
                             <Grass/>
                         </RigidBody>
