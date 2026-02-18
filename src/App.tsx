@@ -13,6 +13,7 @@ import AnimatedClouds from "./groups/AnimatedClouds.tsx";
 import Grass from "./groups/Grass.tsx";
 import Fences from "./groups/Fences.tsx";
 import PlaceCard from "./groups/PlaceCard.tsx";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
     const [jailState,setJailState] = useState<boolean>(false);
@@ -131,6 +132,7 @@ function App() {
                     />
                 </Suspense>
             </Canvas>
+            <Analytics />
         </div>
     )
 }
