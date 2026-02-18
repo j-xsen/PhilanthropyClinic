@@ -44,7 +44,12 @@ async function handler(req: VercelRequest, res: VercelResponse) {
 
     const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY!)
 
-    const rawUrl = process.env.VERCEL_URL || 'localhost:5173'
+    let rawUrl: string;
+    if(process.env.VERCEL_URL){
+      rawUrl = "clinic.jaxsenville.com"
+    } else {
+      rawUrl = 'localhost:5173'
+    }
     const isLocal = rawUrl.startsWith('localhost')
     const url = rawUrl.startsWith('http') ? rawUrl : `${isLocal ? 'http' : 'https'}://${rawUrl}`
     const session = await stripe.checkout.sessions.create({
