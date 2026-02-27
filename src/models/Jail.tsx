@@ -10,6 +10,7 @@ import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
 import LoginOrDonateMenu from "../groups/LoginOrDonateMenu.tsx";
 import {useState} from "react";
+import {A11y} from "@react-three/a11y";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -24,16 +25,6 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
 
   const [panelState, setPanelState] = useState<boolean>(false);
 
-  const onPointerEnter = () => {
-      if (props.jailState || panelState) return;
-      document.body.style.cursor = "pointer";
-  }
-
-  const onPointerLeave = () => {
-      if (props.jailState || panelState) return;
-        document.body.style.cursor = "default";
-  }
-
   const onClick = () => {
       if (props.jailState || panelState) return;
       setPanelState(true);
@@ -44,7 +35,10 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
 
   return (<>
     <group {...props} dispose={null}>
-        <Box material={invisMat} args={[3, 3, 3]} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave} onClick={onClick}/>
+        <A11y role={"button"} description={"A jail holding a carrot."} actionCall={onClick}
+              tabIndex={panelState ? -1 : 0}>
+        <Box material={invisMat} args={[3, 3, 3]}/>
+        </A11y>
       <mesh geometry={nodes.jail.geometry}>
           <meshStandardMaterial map={jailMap} roughness={.2} metalness={0.3}/>
       </mesh>

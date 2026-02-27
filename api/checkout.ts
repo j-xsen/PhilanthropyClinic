@@ -29,7 +29,7 @@ async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { amount } = req.body || {}
+    const { amount, email } = req.body || {}
 
     if (isNaN(amount)) {
         res.status(400).json({ error: 'Invalid donation ID' })
@@ -70,6 +70,7 @@ async function handler(req: VercelRequest, res: VercelResponse) {
       success_url: `${url}/?id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${url}/`,
       automatic_tax: { enabled: true },
+      customer_email: email,
     })
 
     res.json({url:session.url})

@@ -14,6 +14,7 @@ import Grass from "./groups/Grass.tsx";
 import Fences from "./groups/Fences.tsx";
 import PlaceCard from "./groups/PlaceCard.tsx";
 import { Analytics } from "@vercel/analytics/react";
+import {A11yAnnouncer} from "@react-three/a11y";
 
 function App() {
     const [jailState,setJailState] = useState<boolean>(false);
@@ -87,7 +88,7 @@ function App() {
     return (
         <div id={"canvas-container"}>
             <Canvas gl={{localClippingEnabled: true}} shadows>
-                <Suspense>
+                <Suspense fallback={null}>
                     <Sky rayleigh={0.5} turbidity={10} sunPosition={[0, 1, 10]}/>
                     <AnimatedClouds/>
                     <group visible={false}>
@@ -132,7 +133,8 @@ function App() {
                     />
                 </Suspense>
             </Canvas>
-            <Analytics />
+            <A11yAnnouncer/>
+            {typeof window !== "undefined" && <Analytics />}
         </div>
     )
 }
