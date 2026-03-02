@@ -9,7 +9,8 @@ import {Color, Texture, Vector3} from 'three'
 import {useGLTF} from '@react-three/drei'
 import type {GLTF} from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
+import {useA11y} from "@react-three/a11y";
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -22,24 +23,16 @@ export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number,
 
     const geometry = useMemo(() => nodes.Cube.geometry, [nodes])
 
-    const mouseEnter = () => {
-        if(amount===99 && props.pressed) return
-        document.body.style.cursor = "pointer";
-    }
-
-    const mouseExit = () => {
-        document.body.style.cursor = "default";
-    }
+    const a11y = useA11y()
 
     const {amount, textMap, emit, pressed} = props
 
     const material = useMemo(() => {
         return new THREE.MeshStandardMaterial({
             color: new Color(.2, .2, .2),
-            emissive: new Color(1, 1, 1),
+            emissive: new Color(.5, .5, .5),
         })
     }, [])
-
 
     const [scale, setScale] = useState(new THREE.Vector3(0.055, 0.055, 0.055))
 
@@ -51,24 +44,56 @@ export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number,
 
     useEffect(() => {
         material.map = textMap
-        if(amount===99) material.color = new Color(.75, .75, .75)
+        if(amount===99) {
+            material.color = new Color(.75, .75, .75)
+            material.emissiveIntensity = 0
+        }
         if(emit) material.emissiveMap = emit
         material.needsUpdate = true
     }, [emit, textMap, material, amount])
 
-    useEffect(() => {
-        if (amount === 99) {
-            material.emissiveIntensity=0
-            material.color = pressed ? new Color(.25, .25, .25) : new Color(.75, .75, .75)
-        } else {
-            material.emissiveIntensity = pressed ? 0 : 10
+    const colorPressed = useCallback(()=>{
+        return new Color(.25, .25, .25)
+    },[])
+    const colorUnpressed = useCallback(()=>{
+        return new Color(.5, .5, .5)
+    },[])
+    const colorHover = useCallback(()=>{
+        return new Color(.75, .75, .75)
+    },[])
+    const colorPressedHover = useCallback(()=>{
+        return new Color(.3,.3,.3)
+    },[])
+
+    const hover = useCallback(()=>{
+        if(amount===99){
+            material.color = pressed ? colorPressedHover() : colorHover()
+            return
         }
-    }, [pressed, material, amount])
+        material.color = pressed ? colorPressedHover() : colorHover()
+        material.emissiveIntensity = pressed ? 5 : 10
+    }, [material, pressed, colorPressedHover, colorHover, amount])
+
+    const unhover = useCallback(()=>{
+        if(amount===99) {
+            material.color = pressed ? colorPressed() : colorUnpressed()
+            return
+        }
+        material.color = pressed ? colorPressed() : colorUnpressed()
+        material.emissiveIntensity = pressed ? 0 : 5
+    },[amount, material, pressed, colorPressed, colorUnpressed])
+
+    useEffect(() => {
+        if(a11y.hover){
+            hover()
+        } else {
+            unhover()
+        }
+    }, [a11y.hover, hover, unhover])
 
     return (
         <mesh {...props} geometry={geometry} scale={props.pressed ? [scale.x, scale.y / 2, scale.z] : scale}
               name={props.amount as unknown as string} material={material}
-              onPointerEnter={mouseEnter} onPointerLeave={mouseExit}
         />
     )
 }

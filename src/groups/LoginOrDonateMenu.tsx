@@ -3,7 +3,6 @@ import {Container, Content, Text} from "@react-three/uikit";
 import {type ChangeEvent, useCallback, useEffect, useMemo, useState} from "react";
 import {Html, useKTX2} from "@react-three/drei";
 import {Dollar} from "../models/Dollar.tsx";
-import type {ThreeEvent} from "@react-three/fiber";
 import {Light} from "../models/Light.tsx";
 import {type EmailState, OFF, VALID} from "../EmailState.tsx";
 import {A11y} from "@react-three/a11y";
@@ -81,31 +80,22 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         return <></>
     }
 
-    const amountBtnClick = (e: ThreeEvent<MouseEvent>) => {
-        const selected = parseInt(e.eventObject.name)
-        if(selected===99) {
-            handleSubmit().then()
-            return
-        }
-        setSelectedAmount(prev=>prev===selected?null:selected)
-    }
-
     if(!oneMap || !fiveMap || !tenMap || !submitMap || !emitOne || !emitFive || !emitTen) return <></>
 
     return <>
         <group position={[0,0,2.9]}>
         <GoldPlate/>
             <A11y role={"togglebutton"} description={"$1 donation button."} actionCall={selectOne}>
-            <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} pressed={selectedAmount===1} textMap={oneMap} emit={emitOne}/>
+                <Dollar amount={1} position={[-0.4,-0.2,0.5]} rotation={[1.35,0,-.3]} pressed={selectedAmount===1} textMap={oneMap} emit={emitOne}/>
             </A11y>
             <A11y role={"togglebutton"} description={"$5 donation"} actionCall={selectFive}>
-            <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} pressed={selectedAmount===5} textMap={fiveMap} emit={emitFive}/>
+                <Dollar amount={5} position={[-0.2,-0.2,0.5]} rotation={[1.35,0,-.2]} pressed={selectedAmount===5} textMap={fiveMap} emit={emitFive}/>
             </A11y>
             <A11y role={"togglebutton"} description={"$10 donation"} actionCall={selectTen}>
-            <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} pressed={selectedAmount===10} textMap={tenMap} emit={emitTen}/>
+                <Dollar amount={10} position={[0,-0.2,0.5]} rotation={[1.35,0,0]} pressed={selectedAmount===10} textMap={tenMap} emit={emitTen}/>
             </A11y>
             <A11y role={"button"} description={"Submit donation form."} actionCall={handleSubmit}>
-            <Dollar amount={99} position={[.3,-0.2,0.5]} rotation={[1.35,0,.1]} onClick={amountBtnClick} pressed={emailValid===OFF||!selectedAmount} textMap={submitMap}/>
+                <Dollar amount={99} position={[.3,-0.2,0.5]} rotation={[1.35,0,.1]} pressed={emailValid===OFF||!selectedAmount} textMap={submitMap}/>
             </A11y>
             <Light emailValid={emailValid} scale={0.045} rotation={[0,1.56,1.56]} position={[0.55,0.05,.17]}/>
         </group>
