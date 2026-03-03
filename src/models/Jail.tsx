@@ -10,12 +10,24 @@ import type { GLTF } from 'three-stdlib'
 import type {JSX} from "react/jsx-runtime";
 import LoginOrDonateMenu from "../groups/LoginOrDonateMenu.tsx";
 import {useState} from "react";
-import {A11y} from "@react-three/a11y";
+import {A11y, useA11y} from "@react-three/a11y";
+import {FakeGlowMaterial} from "../materials/FakeGlowMaterial.tsx";
 
 type GLTFResult = GLTF & {
   nodes: {
     jail: THREE.Mesh
   }
+}
+
+function JailBox(props:{showBox:boolean}){
+    const a11y = useA11y()
+    return (
+        <Box args={[3, 3, 3]}>
+            {(a11y.focus && props.showBox)
+                ? <FakeGlowMaterial />
+                : <meshStandardMaterial color="white" transparent opacity={0} />}
+        </Box>
+    )
 }
 
 export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolean}) {
@@ -31,13 +43,11 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
       document.body.style.cursor = "default"
   }
 
-  const invisMat = new THREE.MeshStandardMaterial({color: 'white', opacity: 0, transparent: true});
-
   return (<>
     <group {...props} dispose={null}>
         <A11y role={"button"} description={"A jail holding a carrot."} actionCall={onClick}
               tabIndex={panelState ? -1 : 0}>
-        <Box material={invisMat} args={[3, 3, 3]}/>
+            <JailBox showBox={!panelState}/>
         </A11y>
       <mesh geometry={nodes.jail.geometry}>
           <meshStandardMaterial map={jailMap} roughness={.2} metalness={0.3}/>

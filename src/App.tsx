@@ -84,10 +84,12 @@ function App() {
     const piggyRigidRef = useRef<RapierRigidBody>(null!);
     const piggyRef = useRef(null!);
     const carrotRef = useRef<RapierRigidBody>(null!);
+    const canvasRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div id={"canvas-container"}>
-            <Canvas gl={{localClippingEnabled: true}} shadows>
+        <div id={"canvas-container"} ref={canvasRef} role={"presentation"}>
+            <Canvas gl={{localClippingEnabled: true}} shadows role={"region"}
+                    aria-label={"3D scene showing a Pig and a carrot in jail"}>
                 <Suspense fallback={null}>
                     <Sky rayleigh={0.5} turbidity={10} sunPosition={[0, 1, 10]}/>
                     <AnimatedClouds/>
