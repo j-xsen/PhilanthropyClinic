@@ -5,7 +5,19 @@ import {Html, useKTX2} from "@react-three/drei";
 import {Dollar} from "../models/Dollar.tsx";
 import {Light} from "../models/Light.tsx";
 import {type EmailState, OFF, VALID} from "../EmailState.tsx";
-import {A11y} from "@react-three/a11y";
+import {A11y, useA11y} from "@react-three/a11y";
+
+function ExitButton(){
+
+    const a11y = useA11y()
+
+    return (
+        <Container backgroundColor={a11y.hover || a11y.focus ? "#d60b0b" : "#9a1212"}
+                   width={10} height={10} positionType={"absolute"} positionTop={-65}>
+            <Text fontWeight={"bold"} marginLeft={1.5} color={"white"} fontSize={9}>X</Text>
+        </Container>
+    )
+}
 
 export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelState:(state:boolean)=>void}) {
 
@@ -13,18 +25,6 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
     const [selectedAmount, setSelectedAmount] = useState<number | null>(null)
 
     const [emailValid, setEmailValid] = useState<EmailState>(OFF);
-
-    // exit
-    const [exitColor, setExitColor] = useState<string>("#9a1212");
-    const exitMouseEnter = useCallback(() => {
-        setExitColor("#d60b0b")
-    },[])
-    const exitMouseExit = useCallback(() => {
-        setExitColor("#9a1212")
-    },[])
-    const exitMouseDown = useCallback(() => {
-        setExitColor("#7e1919")
-    },[])
     const {setPanelState} = props
     const exitFunc = useCallback(() => {
         setIsVisible(false);
@@ -112,9 +112,7 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
         <group position={[.55,-.05,0.2]}>
             <A11y role={"button"} description={"Exit button. Closes the donation menu."} actionCall={exitFunc}
             a11yElStyle={{position:"absolute", top:-175}}>
-        <Container backgroundColor={exitColor} width={10} height={10} positionType={"absolute"} positionTop={-65} onPointerEnter={exitMouseEnter} onPointerLeave={exitMouseExit} onPointerDown={exitMouseDown} onPointerUp={exitMouseExit} >
-            <Text fontWeight={"bold"} marginLeft={1.5} color={"white"} fontSize={9}>X</Text>
-        </Container>
+            <ExitButton/>
         </A11y>
         </group>
     </group>

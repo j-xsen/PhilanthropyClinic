@@ -84,12 +84,12 @@ export function Dollar(props: JSX.IntrinsicElements['group'] & { amount: number,
     },[amount, material, pressed, colorPressed, colorUnpressed])
 
     useEffect(() => {
-        if(a11y.hover){
+        if(a11y.hover || a11y.focus){
             hover()
         } else {
             unhover()
         }
-    }, [a11y.hover, hover, unhover])
+    }, [a11y.hover, a11y.focus, hover, unhover])
 
     return (
         <mesh {...props} geometry={geometry} scale={props.pressed ? [scale.x, scale.y / 2, scale.z] : scale}
