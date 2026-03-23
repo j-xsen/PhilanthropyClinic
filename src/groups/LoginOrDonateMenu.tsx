@@ -56,7 +56,11 @@ export default function LoginOrDonateMenu(props:{panelState:boolean, setPanelSta
                 amount: selectedAmount
             })
         }).then(res => res.json()).then(data => {
-            if(data.url) window.location.href = data.url
+            if(data.url) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (window as any).umami?.track('checkout_started', {amount: selectedAmount});
+                window.location.href = data.url;
+            }
         })
     },[emailValid, selectedAmount])
 

@@ -40,7 +40,9 @@ export function Jail(props: JSX.IntrinsicElements['group'] & {jailState?: boolea
   const onClick = () => {
       if (props.jailState || panelState) return;
       setPanelState(true);
-      document.body.style.cursor = "default"
+      document.body.style.cursor = "default";
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).umami?.track('panel_opened');
   }
 
   return (<>
