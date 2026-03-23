@@ -13,7 +13,6 @@ import AnimatedClouds from "./groups/AnimatedClouds.tsx";
 import Grass from "./groups/Grass.tsx";
 import Fences from "./groups/Fences.tsx";
 import PlaceCard from "./groups/PlaceCard.tsx";
-import { Analytics } from "@vercel/analytics/react";
 import {A11yAnnouncer} from "@react-three/a11y";
 
 function App() {
@@ -136,7 +135,6 @@ function App() {
                 </Suspense>
             </Canvas>
             <A11yAnnouncer/>
-            {typeof window !== "undefined" && <Analytics />}
         </div>
     )
 }
